@@ -1,0 +1,47 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true
+  },
+  "files.associations": {
+    "workflows/*.json": "json"
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["workflows/*.json"],
+      "schema": {
+        "type": "object",
+        "required": ["name", "nodes", "connections"],
+        "properties": {
+          "name": { "type": "string" },
+          "nodes": { "type": "array" },
+          "connections": { "type": "object" },
+          "active": { "type": "boolean" },
+          "settings": { "type": "object" },
+          "versionId": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[html]": {
+    "editor.tabSize": 2
+  },
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[css]": {
+    "editor.tabSize": 2
+  },
+  "search.exclude": {
+    "site/**": false,
+    "workflows/**": false
+  },
+  "git.ignoreLimitWarning": true
+}

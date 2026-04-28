@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pyragogy Live Lab — The Peeragogy Handbook AI Orchestra</title>
+
+<!-- ── SEO & Open Graph ── -->
+<meta name="description" content="Four AI agents read a Peeragogy Handbook chapter, research the world, challenge assumptions, and synthesize a structured revision document — live.">
+<meta name="author" content="Fabrizio Terzi">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://open-review.pyragogy.org/">
+<meta property="og:title" content="Pyragogy Live Lab — The Peeragogy Handbook AI Orchestra">
+<meta property="og:description" content="Four AI agents read a Peeragogy Handbook chapter, research the world, challenge assumptions, and synthesize a structured revision document — live.">
+<meta property="og:image" content="https://open-review.pyragogy.org/assets/og_image.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pyragogy Live Lab — AI Orchestra">
+<meta name="twitter:description" content="Four AI agents analyzing the Peeragogy Handbook. Live, in front of you.">
+<meta name="twitter:image" content="https://open-review.pyragogy.org/assets/og-image.png">
+<link rel="icon" type="image/svg+xml" href="https://open-review.pyragogy.org/assets/favicon.svg">
+<link rel="canonical" href="index.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://open-review.pyragogy.org/css/style.css">
+</head>
+<body>
+
+<div class="mesh"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="grid-bg"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="alert" aria-live="assertive">
+  <span id="toastIcon">✅</span><span id="toastMsg">Done!</span>
+</div>
+
+<div class="wrap" role="main">
+
+<!-- ══ NAV ══ -->
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-brand">
+    <img src="https://open-review.pyragogy.org/assets/logo.svg" alt="Pyragogy logo" height="36">
+    <div class="nav-brand-name"> / Bergamo|Hub</div>
+  </div>
+  <div class="nav-tag">V1.2 </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-badge"><span class="live-pulse" aria-hidden="true"></span>Multi-Agent AI · Live Lab</div>
+  <h1>AI-Powered<br><span class="line2">Peeragogy Handbook Reviewer</span></h1>
+  <p class="hero-desc">Four AI agents read a Peeragogy Handbook chapter, research the world, challenge assumptions, and synthesize a structured revision document — live, in front of you.</p>
+  <div class="hero-pills">
+    <span class="hpill hp1">🌍 Global Researcher</span>
+    <span class="hpill hp2">📚 Resonance Knowledge</span>
+    <span class="hpill hp3">🎸 Pattern Distortion</span>
+    <span class="hpill hp4">✍️ Complicit Editor</span>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<div class="section-label"><span>How It Works</span></div>
+<div class="how">
+  <div class="hstep">
+    <div class="hstep-num">STEP 01</div>
+    <span class="hstep-icon">📖</span>
+    <h3>Choose a Chapter</h3>
+    <p>Select any chapter from the Peeragogy Handbook. The Orchestra fetches live content directly from our mirror repository.</p>
+  </div>
+  <div class="hstep">
+    <div class="hstep-num">STEP 02</div>
+    <span class="hstep-icon">🤖</span>
+    <h3>Four Agents Work</h3>
+    <p>Three specialist agents analyze the chapter in parallel from different angles, then a fourth synthesizes their voices into one coherent document.</p>
+  </div>
+  <div class="hstep">
+    <div class="hstep-num">STEP 03</div>
+    <span class="hstep-icon">📄</span>
+    <h3>Receive Your Score</h3>
+    <p>A structured revision document streams back — with real tensions identified, actionable interventions, and an open question only a human can answer.</p>
+  </div>
+</div>
+
+<!-- ══ AGENTS ══ -->
+<div class="section-label"><span>The Four Agents</span></div>
+<div class="agents-grid" id="agentsGrid">
+  <div class="agent-card ac1" id="agent-1">
+    <span class="agent-status" id="as-1">STANDBY</span>
+    <div class="agent-icon">🌍</div>
+    <div class="agent-name">Agent 01</div>
+    <div class="agent-title">Global Researcher</div>
+    <div class="agent-desc">Scans peer-learning trends (2024–2026), identifies tensions with current movements, and maps resonances with emerging practices like AI-augmented and post-LMS pedagogy.</div>
+  </div>
+  <div class="agent-card ac2" id="agent-2">
+    <span class="agent-status" id="as-2">STANDBY</span>
+    <div class="agent-icon">📚</div>
+    <div class="agent-name">Agent 02</div>
+    <div class="agent-title">Resonance Knowledge</div>
+    <div class="agent-desc">Acts as the Handbook's memory — checks internal coherence, cross-references, vocabulary fidelity, and identifies what must be unconditionally preserved.</div>
+  </div>
+  <div class="agent-card ac3" id="agent-3">
+    <span class="agent-status" id="as-3">STANDBY</span>
+    <div class="agent-icon">🎸</div>
+    <div class="agent-name">Agent 03</div>
+    <div class="agent-title">Perturbator Pattern</div>
+    <div class="agent-desc">The lead guitar. Challenges structural logic, dismantles sacred premises, and proposes radical reframings calibrated by your chosen perturbation intensity.</div>
+  </div>
+  <div class="agent-card ac4" id="agent-4">
+    <span class="agent-status" id="as-4">STANDBY</span>
+    <div class="agent-icon">✍️</div>
+    <div class="agent-name">Agent 04</div>
+    <div class="agent-title">Complicit Editor</div>
+    <div class="agent-desc">Listens to all three voices and writes the truth — a narrative revision document that names contradictions rather than hiding them.</div>
+  </div>
+</div>
+
+<!-- ══ CHAPTER SELECT ══ -->
+<div class="section-label"><span>Run the Orchestra</span></div>
+<div class="card">
+  <div class="card-title">📖 Select a Chapter</div>
+  <div class="chapter-grid" id="chapterGrid"></div>
+  <div class="selected-info" id="selectedInfo"></div>
+</div>
+
+<!-- ══ CONFIG ══ -->
+<div class="card">
+  <div class="card-title-row">
+    <div class="card-title">⚙️ Configuration</div>
+    <div class="status-indicators">
+      <div class="status-pill checking" id="n8nStatus">
+        <span class="status-dot" id="n8nDot"></span>
+        <span class="status-text" id="n8nText">n8n — checking…</span>
+      </div>
+      <div class="status-pill" id="keyStatus" style="opacity:.4">
+        <span class="status-dot" id="keyDot"></span>
+        <span class="status-text" id="keyText">API Key — not set</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="apiKey">OpenRouter API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-or-v1-..." autocomplete="off">
+      <div class="security-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<p class="key-warning">
+  Use a <strong>dedicated key</strong> with a spending limit — 
+  Your key passes through our server just for the duration of the run.
+  <a href="https://openrouter.ai/keys" target="_blank">Create a limited key →</a>
+</p>      </div>
+    </div>
+    <div class="field">
+      <label for="collaboratorId">Collaborator ID <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:.85em">(optional)</span></label>
+      <input type="text" id="collaboratorId" placeholder="your-name or anonymous">
+    </div>
+  </div>
+
+  <div class="field" style="margin-bottom:1.5rem;">
+    <label for="notes">Reviewer Notes <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:.85em">(optional — your intuitions matter)</span></label>
+    <textarea id="notes" placeholder="What concerns you about this chapter? Any specific angle you want the Orchestra to focus on?"></textarea>
+  </div>
+
+  <!-- SLIDER -->
+  <div class="slider-wrap">
+    <div class="slider-header">
+      <span class="slider-label">Perturbation Intensity</span>
+      <span class="slider-val" id="sliderVal">3</span>
+    </div>
+    <div class="slider-track">
+      <input type="range" id="intSlider" min="1" max="5" value="3"
+             oninput="updateSlider(this.value)"
+             aria-label="Perturbation intensity 1 to 5"
+             aria-valuemin="1" aria-valuemax="5">
+    </div>
+    <div class="slider-ticks" aria-hidden="true">
+      <div class="slider-tick">1<br>Gentle</div>
+      <div class="slider-tick">2<br>Nudge</div>
+      <div class="slider-tick">3<br>Balanced</div>
+      <div class="slider-tick">4<br>Push</div>
+      <div class="slider-tick">5<br>Demolition</div>
+    </div>
+  </div>
+
+  <button class="run-btn" id="rbtn" onclick="runOrchestra()" disabled>
+    🎼 Run the Orchestra
+  </button>
+</div>
+
+<!-- ══ STATUS + PIPELINE ══ -->
+<div id="statusWrap" style="display:none;" aria-live="polite">
+  <div class="status-bar" role="status">
+    <div class="sdot" id="sdot" aria-hidden="true"></div>
+    <span class="slabel" id="slabel">Ready</span>
+  </div>
+  <div class="progress-wrap" aria-hidden="true">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="pipeline">
+    <div class="pipe-step" id="ps0">📖 Fetch</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps1">⚙️ Extract</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps2">🌍 Researcher</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps3">📚 Resonance</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps4">🎸 Perturbation</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps5">✍️ Editor</div><div class="pipe-arrow">›</div>
+    <div class="pipe-step" id="ps6">📄 Done</div>
+  </div>
+</div>
+
+<!-- ══ OUTPUT ══ -->
+<div class="output-panel" id="opanel">
+  <div class="output-header">
+    <div class="output-title">📄 Revision Document</div>
+  </div>
+  <div class="output-body" id="outbody"></div>
+  <div class="out-actions" id="outactions">
+    <button class="out-btn primary" id="copyBtn" onclick="copyOutput()">📋 Copy Revision</button>
+    <button class="out-btn" onclick="downloadMD()">⬇️ Download .md</button>
+  </div>
+
+  <!-- VOICES -->
+  <div class="voices-section" id="voicesSection" style="display:none;">
+    <div class="section-label" style="margin-top:2rem;"><span>Individual Agent Voices</span></div>
+    <div class="voices-tabs">
+      <button class="vtab active" onclick="showVoice('researcher',this)">🌍 Researcher</button>
+      <button class="vtab" onclick="showVoice('resonance',this)">📚 Resonance</button>
+      <button class="vtab" onclick="showVoice('distortion',this)">🎸 Distortion</button>
+      <button class="vtab" onclick="showVoice('brief',this)">📋 Full Brief</button>
+    </div>
+    <div class="voice-content on" id="vc-researcher"></div>
+    <div class="voice-content"    id="vc-resonance"></div>
+    <div class="voice-content"    id="vc-distortion"></div>
+    <div class="voice-content"    id="vc-brief"></div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div class="about-section">
+  <div class="section-label"><span>About Pyragogy</span></div>
+  <div class="about-grid">
+    <div class="about-block">
+      <h3>What is Pyragogy?</h3>
+        <p>Pyragogy is an open AI-powered tool by <strong style="color:var(--text)">Fabrizio Terzi</strong> — an ecosystem of specialized agents forming an <strong>AI Orchestra</strong> within an <strong>AI Village</strong>. It synchronizes human and machine intelligence to engage with the living patterns of the <a href="https://peeragogy.org" target="_blank" rel="noopener">Peeragogy Handbook</a> and brings peer learning into the era of collaborative, distributed intelligence.</p>
+    </div>
+    <div class="about-block">
+      <h3>The Orchestra</h3>
+      <p>The Live Lab Orchestra is one instrument in a larger ensemble. Each agent carries a distinct epistemic posture — not a role, but a <em style="color:var(--violet3)">mode of attention</em>. The Complicit Editor does not resolve the tension between them. It names it. That friction is the document.</p>
+    </div>
+    <div class="about-block">
+      <h3>Orchestration Stack</h3>
+      <p>The pipeline runs on <a href="https://n8n.io" target="_blank" rel="noopener">n8n</a> with models served via <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>. No data is stored server-side. Your API key lives only in the request. The revision belongs entirely to you.</p>
+    </div>
+    <div class="about-block">
+      <h3>Contact</h3>
+      <p>Questions, contributions, provocations:<br>
+      <!-- Email protetta: rot13 decodificata via JS, zero Cloudflare dependency -->
+      <a href="index.html#" id="contactEmail" class="protected-email" data-rot13="vasb@clentbtl.bet">
+        <span id="emailDisplay">●●●●@pyragogy.org</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="f-content">
+    <p>A learning cognitive extension by <strong>Fabrizio Terzi</strong> · 2026</p>
+    <a href="https://www.buymeacoffee.com/BergamoHub" target="_blank" class="donation-btn-blues">
+      <span class="emoji">🎸</span>
+      <span class="text">Bergamo|Hub: <em>Blues &amp; Brains</em></span>
+    </a>
+  </div>
+</footer>
+
+</div><!-- /.wrap -->
+
+<!-- ══ SCRIPTS — order matters: config → ui-effects → orchestra ══ -->
+<script src="https://open-review.pyragogy.org/js/config.js"></script>
+<script src="https://open-review.pyragogy.org/js/ui-effects.js"></script>
+<script src="https://open-review.pyragogy.org/js/orchestra.js"></script>
+
+<!-- Plausible Analytics -->
+<script defer data-domain="open-review.pyragogy.org" src="https://plausible.pyragogy.org/js/script.js"></script>
+
+</body>
+</html>
