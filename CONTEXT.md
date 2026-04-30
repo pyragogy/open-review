@@ -68,3 +68,5 @@ Most of these run on a Contabo VPS via Coolify + Docker behind Cloudflare. **Thi
 **...**
 
 The ritual is the heartbeat. As Obliqo evolves (new models, evolved prompts, deeper agents), the static artifact gets refreshed. Each edition becomes citable, datable, archivable. The "diff" between editions tells the story of how AI critique evolves over time — itself a research artifact.
+
+Each annual edition introduces visible evolution. The 2026 → 2027 diff includes: numerical scoring (was: enum-only), inline highlights (was: panel-only), expanded chunk handling (was: 12k char truncate). The diff itself becomes a research artifact.

@@ -81,6 +81,13 @@
 - The same codebase hosts all editions, with a edition-switcher in the UI
 - The "diff" between editions becomes its own page, showing how AI critique evolves
 
+### Engine v3 features (deferred to edition 2027+)
+
+The 2026 edition uses workflow v2.2, which emits enum-only revision scores and free-form Markdown voices without offset anchoring. Two visible upgrades are deferred to the next ritual:
+
+- **Numerical revision score (gauge):** requires workflow v3, deferred to edition 2027+
+- **Inline text highlights with offset anchoring:** requires workflow v3 annotated mode (paragraph-segmented input + offset-bearing annotations), deferred to edition 2027+
+
 ## What we HAVE access to (via founder's stack)
 
 These exist in the broader Pyragogy ecosystem and can be referenced or read from, but are not directly modified by this codebase:

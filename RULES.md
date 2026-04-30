@@ -80,7 +80,16 @@ User-facing copy can be in Italian where it feels natural (founder's voice, audi
 Tone is closer to a literary review than to a product page. No "Sign up now!", no "Boost your productivity!", no marketing CTAs in body content. The single CTA is the footer link to Obliqo, written soberly.
 
 ### R20 — Visual identity: ink-violet
-Inherited from the maintenance page (April 2026). Hoefler Text italic for headings, Charter for body, JetBrains Mono for UI/metadata. Asymmetric layouts. Grain texture. Two radial washes drift. Dark editorial atmosphere.
+Inherited from the maintenance page (April 2026). Charter (true italic) for body and headings, JetBrains Mono for UI/metadata. Asymmetric layouts. Grain texture. Two radial washes drift. Dark editorial atmosphere.
+
+Hoefler Text was named in earlier drafts but is proprietary (Adobe), not legally self-hostable, and offered no fallback parity that justified the licensing risk. Charter ships a real italic and is open — it carries the editorial register on its own.
+
+**Agent voice palette** (semantic, not brand):
+
+- Critical Researcher → indigo `#6366f1`
+- Resonance Pattern → emerald `#10b981`
+- Distortion Pattern → rose `#f43f5e`
+- Editorial Brief → violet `#a78bfa` — distinct from Obliqo amber but coherent with the ink-violet brand family
 
 Amber `#f59e0b` is reserved for Obliqo. Do not use in Open Review except in the explicit "powered by Obliqo" link.
 
