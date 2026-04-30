@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pyragogy Orchestra — On Pause</title>
+
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="The Pyragogy Orchestra is on pause. We're rebuilding it from the ground up.">
+<meta name="theme-color" content="#0d0a18">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%23a78bfa' stroke-width='1.4'/><circle cx='16' cy='16' r='3' fill='%23a78bfa'/></svg>">
+
+<style>
+:root{
+  --ink:        #0d0a18;
+  --ink-soft:   #14102a;
+  --paper:      #ece6f5;
+  --paper-mute: #b6acc9;
+  --paper-fade: #6e6587;
+  --rule:       rgba(236,230,245,.08);
+  --violet:     #a78bfa;
+  --violet-deep:#6d28d9;
+  --violet-pale:#d8b4fe;
+
+  --serif:  'Hoefler Text','Baskerville Old Face','Big Caslon','Iowan Old Style',Garamond,'Times New Roman',serif;
+  --book:   Charter,'Bitstream Charter','Sitka Text',Cambria,'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  --mono:   ui-monospace,'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace;
+
+  --maxw: 1180px;
+  --pad-x: clamp(1.5rem, 5vw, 5rem);
+  --pad-y: clamp(2rem, 6vh, 4.5rem);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+
+body{
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--book);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern", "liga", "onum";
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Atmosphere: one slow violet drift, distant grain ── */
+.atmos{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.atmos::before{
+  /* deep radial wash, off-center */
+  content:"";
+  position:absolute;
+  width: 90vmax; height: 90vmax;
+  top: -30vmax; right: -25vmax;
+  background: radial-gradient(closest-side, rgba(109,40,217,.35), rgba(109,40,217,0) 70%);
+  filter: blur(40px);
+  animation: drift 38s ease-in-out infinite alternate;
+}
+.atmos::after{
+  /* second smaller wash, deeper hue */
+  content:"";
+  position:absolute;
+  width: 60vmax; height: 60vmax;
+  bottom: -20vmax; left: -15vmax;
+  background: radial-gradient(closest-side, rgba(167,139,250,.18), rgba(167,139,250,0) 70%);
+  filter: blur(50px);
+  animation: drift 52s ease-in-out infinite alternate-reverse;
+}
+@keyframes drift{
+  0%   { transform: translate3d(0,0,0)         scale(1); }
+  100% { transform: translate3d(-4vw,3vh,0)    scale(1.08); }
+}
+
+/* faint star-grain — tiny dots, very few */
+.stars{
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(236,230,245,.55), transparent 60%),
+    radial-gradient(1px 1px at 78% 14%, rgba(216,180,254,.5), transparent 60%),
+    radial-gradient(1px 1px at 34% 78%, rgba(236,230,245,.4), transparent 60%),
+    radial-gradient(1px 1px at 88% 64%, rgba(167,139,250,.6), transparent 60%),
+    radial-gradient(1px 1px at 56% 38%, rgba(236,230,245,.3), transparent 60%),
+    radial-gradient(1px 1px at 22% 56%, rgba(216,180,254,.35), transparent 60%);
+  animation: twinkle 9s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%, 100% { opacity: .55; }
+  50%      { opacity: .9;  }
+}
+
+/* gentle grain via SVG noise data-URI — adds paper texture */
+.grain{
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ── Layout shell ── */
+.shell{
+  position: relative;
+  z-index: 5;
+  flex: 1 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-width: var(--maxw);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--pad-y) var(--pad-x);
+}
+
+/* ── Masthead ── */
+.masthead{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--paper-fade);
+}
+.masthead .mark{
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+}
+.mark .glyph{
+  width: 14px; height: 14px;
+  border: 1px solid var(--violet);
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+}
+.mark .glyph::after{
+  content:"";
+  position:absolute;
+  width: 4px; height: 4px;
+  background: var(--violet);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation: pulse 3.4s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%, 100% { opacity: .5; transform: translate(-50%,-50%) scale(.85); }
+  50%      { opacity: 1;  transform: translate(-50%,-50%) scale(1.15);}
+}
+.masthead .status{
+  color: var(--violet-pale);
+}
+.masthead .status .dot{
+  display:inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet);
+  margin-right: .5rem; vertical-align: middle;
+  box-shadow: 0 0 0 3px rgba(167,139,250,.15);
+}
+
+/* ── Manifesto ── */
+.manifesto{
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: end;
+  padding: clamp(3rem, 10vh, 7rem) 0 clamp(2.5rem, 8vh, 5rem);
+}
+.lede{
+  align-self: end;
+}
+.eyebrow{
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .8rem;
+}
+.eyebrow::before{
+  content:"";
+  width: 28px; height: 1px;
+  background: var(--violet);
+  display: inline-block;
+}
+
+h1{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(2.6rem, 7.4vw, 6.2rem);
+  line-height: .98;
+  letter-spacing: -.015em;
+  color: var(--paper);
+  margin-bottom: 1.4rem;
+  text-wrap: balance;
+}
+h1 .break{ display: block; }
+h1 .accent{
+  color: var(--violet-pale);
+}
+h1 .stop{
+  display: inline-block;
+  color: var(--violet);
+  font-style: normal;
+  animation: blink 2.6s steps(2,end) infinite;
+}
+@keyframes blink{
+  0%, 60%, 100% { opacity: 1; }
+  62%, 98%      { opacity: .15; }
+}
+
+.subhead{
+  font-family: var(--book);
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--paper-mute);
+  max-width: 32ch;
+  font-style: italic;
+}
+
+/* right column — quiet aside */
+.aside{
+  font-family: var(--book);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--paper-mute);
+  max-width: 38ch;
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(1rem, 2vw, 1.75rem);
+}
+.aside p + p{ margin-top: 1rem; }
+.aside .drop{
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper);
+  font-size: 1.4em;
+  line-height: 1;
+  float: left;
+  padding: .12em .18em 0 0;
+}
+
+/* ── Footer ── */
+.footer{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--paper-fade);
+}
+.footer a{
+  color: var(--paper-mute);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .25s ease, border-color .25s ease;
+  padding-bottom: 1px;
+}
+.footer a:hover,
+.footer a:focus-visible{
+  color: var(--violet-pale);
+  border-bottom-color: var(--violet);
+  outline: none;
+}
+.footer .center{
+  font-family: var(--serif);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: .95rem;
+  color: var(--paper-fade);
+}
+.footer .right{ text-align: right; }
+.footer .right a{ margin-left: .8rem; }
+
+/* ── Reveal: stagger on load ── */
+.r{ opacity: 0; transform: translateY(14px); animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.r1{ animation-delay: .1s; }
+.r2{ animation-delay: .35s; }
+.r3{ animation-delay: .6s; }
+.r4{ animation-delay: .85s; }
+.r5{ animation-delay: 1.05s; }
+.r6{ animation-delay: 1.25s; }
+@keyframes rise{
+  to{ opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .r{ opacity: 1; transform: none; animation: none; }
+  .atmos::before, .atmos::after, .stars, .mark .glyph::after, h1 .stop{ animation: none; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 760px){
+  body{ font-size: 16px; }
+  .manifesto{
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    padding: 2.5rem 0 2rem;
+  }
+  .aside{
+    border-left: none;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    padding-top: 1.75rem;
+    max-width: none;
+  }
+  .footer{
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1rem;
+  }
+  .footer .right{ text-align: center; }
+  .footer .right a{ margin: 0 .4rem; }
+  .masthead{ font-size: .68rem; }
+}
+@media (max-width: 420px){
+  .masthead .status span:not(.dot){ display: none; }
+  .masthead .status::after{ content: "PAUSED"; }
+}
+
+::selection{
+  background: var(--violet-deep);
+  color: var(--paper);
+}
+</style>
+</head>
+<body>
+
+<div class="atmos"  aria-hidden="true"></div>
+<div class="stars"  aria-hidden="true"></div>
+<div class="grain"  aria-hidden="true"></div>
+
+<div class="shell">
+
+  <header class="masthead r r1">
+    <span class="mark">
+      <span class="glyph" aria-hidden="true"></span>
+      Pyragogy &nbsp;·&nbsp; Orchestra
+    </span>
+    <span class="status" aria-label="Status: paused">
+      <span class="dot" aria-hidden="true"></span><span>Status — Paused</span>
+    </span>
+  </header>
+
+  <section class="manifesto" role="main">
+
+    <div class="lede">
+      <p class="eyebrow r r2">An interlude</p>
+      <h1 class="r r3">
+        <span class="break">The Orchestra is</span>
+        <span class="break"><em class="accent">taking a break</em><span class="stop">.</span></span>
+      </h1>
+      <p class="subhead r r4">
+        We're rebuilding it from the ground up — slower, quieter, and with sharper instruments.
+      </p>
+    </div>
+
+    <aside class="aside r r5">
+      <p>
+        <span class="drop">N</span>o launch date, no countdown, no waitlist. The first version
+        taught us what the Orchestra wants to become; the next one will sound like that, not
+        like this.
+      </p>
+      <p>
+        If you were mid-conversation with the agents, thank you. The transcripts informed every
+        decision in the rewrite.
+      </p>
+    </aside>
+
+  </section>
+
+  <footer class="footer r r6">
+    <span class="left">
+      <a href="https://pyragogy.org" rel="noopener">pyragogy.org</a>
+    </span>
+    <span class="center">— quiet study in progress —</span>
+    <span class="right">
+      <a href="mailto:info@pyragogy.org">info@pyragogy.org</a>
+    </span>
+  </footer>
+
+</div>
+
+</body>
+</html>
