@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pyragogy Live Lab — Migration in Progress</title>
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="refresh" content="120">
+
+<meta name="description" content="The Pyragogy Live Lab Orchestra is being upgraded. Back online shortly.">
+<meta property="og:title" content="Pyragogy Live Lab — Migration in Progress">
+<meta property="og:description" content="The Orchestra is being upgraded. Back online shortly.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://open-review.pyragogy.org/">
+<meta property="og:image" content="https://open-review.pyragogy.org/assets/og_image.webp">
+
+<link rel="icon" type="image/svg+xml" href="https://open-review.pyragogy.org/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0a0a0f; --bg2:#0f0f1a;
+  --text:#f0f0f5; --text2:#b8b8c8; --text3:#7a7a8c;
+  --violet1:#a855f7; --violet2:#9333ea; --violet3:#c084fc;
+  --pink:#ec4899; --cyan:#22d3ee; --amber:#fbbf24;
+  --border:rgba(255,255,255,.08);
+  --card:rgba(20,20,30,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  overflow:hidden;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem 1.25rem;
+}
+
+/* mesh background — same vibe as main site */
+.mesh{position:fixed;inset:0;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.55}
+.o1{width:520px;height:520px;background:var(--violet2);top:-12%;left:-8%;animation:float1 18s ease-in-out infinite}
+.o2{width:460px;height:460px;background:var(--pink);bottom:-15%;right:-10%;animation:float2 22s ease-in-out infinite}
+.o3{width:380px;height:380px;background:var(--cyan);top:42%;left:48%;animation:float3 26s ease-in-out infinite;opacity:.35}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,40px) scale(1.08)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-30px) scale(1.06)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-50px) scale(1.1)}}
+
+.grid-bg{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.3;
+  background-image:
+    linear-gradient(rgba(168,85,247,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(168,85,247,.06) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+
+main{
+  position:relative;z-index:2;
+  max-width:680px;width:100%;
+  text-align:center;
+  background:var(--card);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:3rem 2.5rem;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+.brand{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  margin-bottom:2rem;font-size:.78rem;color:var(--text3);
+  letter-spacing:.2em;text-transform:uppercase;font-weight:600;
+}
+.brand img{height:28px;opacity:.85}
+
+.live-pulse{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--amber);
+  box-shadow:0 0 0 0 var(--amber);
+  animation:pulse 2s infinite;
+  margin-right:.5rem;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(251,191,36,.7)}
+  70%{box-shadow:0 0 0 14px rgba(251,191,36,0)}
+  100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}
+}
+
+.badge{
+  display:inline-flex;align-items:center;
+  padding:.55rem 1.1rem;border-radius:999px;
+  background:rgba(251,191,36,.1);
+  border:1px solid rgba(251,191,36,.3);
+  color:var(--amber);
+  font-size:.78rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+
+h1{
+  font-family:'Playfair Display',serif;
+  font-weight:900;
+  font-size:clamp(2.2rem,5.5vw,3.6rem);
+  line-height:1.05;letter-spacing:-.02em;
+  margin-bottom:1rem;
+}
+h1 .accent{
+  background:linear-gradient(135deg,var(--violet3) 0%,var(--pink) 60%,var(--amber) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;
+}
+
+.lede{
+  color:var(--text2);
+  font-size:1.08rem;
+  line-height:1.6;
+  margin-bottom:2rem;
+  max-width:540px;margin-left:auto;margin-right:auto;
+}
+
+.steps{
+  display:flex;justify-content:center;gap:.6rem;
+  margin:2rem auto 1.5rem;flex-wrap:wrap;
+}
+.step{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.45rem .9rem;border-radius:999px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  font-size:.82rem;color:var(--text2);
+}
+.step.done{color:var(--text);border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.08)}
+.step.active{color:var(--text);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.1)}
+.step.done::before{content:"✓";color:var(--cyan);font-weight:700}
+.step.active::before{content:"●";color:var(--amber);animation:blink 1.4s infinite}
+.step.todo::before{content:"○";color:var(--text3)}
+@keyframes blink{50%{opacity:.3}}
+
+.probe{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;
+  color:var(--text3);margin-top:1.5rem;
+  padding-top:1.5rem;border-top:1px solid var(--border);
+}
+.probe-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);animation:probe 2s infinite}
+.probe.up .probe-dot{background:#22c55e;animation:none;box-shadow:0 0 12px #22c55e}
+.probe.up{color:#22c55e}
+@keyframes probe{0%,100%{opacity:.3}50%{opacity:1}}
+
+.foot{
+  margin-top:2rem;font-size:.82rem;color:var(--text3);
+}
+.foot a{color:var(--violet3);text-decoration:none;border-bottom:1px dashed rgba(192,132,252,.3)}
+.foot a:hover{color:var(--text)}
+
+@media (max-width:520px){
+  main{padding:2rem 1.5rem;border-radius:20px}
+  .steps{gap:.4rem}
+  .step{font-size:.75rem;padding:.4rem .7rem}
+}
+</style>
+</head>
+<body>
+
+<div class="mesh" aria-hidden="true">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<main role="main">
+
+  <div class="brand">
+    <img src="https://open-review.pyragogy.org/assets/logo.svg" alt="" onerror="this.style.display='none'">
+    <span>Pyragogy · Bergamo|Hub</span>
+  </div>
+
+  <div class="badge">
+    <span class="live-pulse" aria-hidden="true"></span>
+    Migration in Progress
+  </div>
+
+  <h1>The Orchestra is<br><span class="accent">tuning up.</span></h1>
+
+  <p class="lede">
+    We're swapping the workflow engine under the hood — moving the four agents
+    onto a new score so they can play tighter, faster, and with cleaner voices.
+    The Live Lab returns the moment the new pipeline lands.
+  </p>
+
+  <div class="steps" aria-label="Migration progress">
+    <span class="step done">Snapshot taken</span>
+    <span class="step active">Wiring new workflow</span>
+    <span class="step todo" id="stepProbe">Endpoint live</span>
+  </div>
+
+  <div class="probe" id="probe">
+    <span class="probe-dot" aria-hidden="true"></span>
+    <span id="probeText">probing endpoint…</span>
+  </div>
+
+  <p class="foot">
+    Auto-refresh every 2 minutes · Manual reload also fine.<br>
+    Questions? <a href="mailto:info@pyragogy.org">info@pyragogy.org</a>
+  </p>
+
+</main>
+
+<script>
+// ── Endpoint to watch — flip when new workflow registers a different path ──
+const EXPECTED_WEBHOOK = 'https://n8n.pyragogy.org/webhook/peeragogy-review1';
+const PROBE_INTERVAL_MS = 30000;
+const REDIRECT_TO = '/';
+
+const probe   = document.getElementById('probe');
+const txt     = document.getElementById('probeText');
+const stepEl  = document.getElementById('stepProbe');
+
+async function pingEndpoint(){
+  try{
+    const ctrl = new AbortController();
+    const tid  = setTimeout(()=>ctrl.abort(), 6000);
+    const res  = await fetch(EXPECTED_WEBHOOK, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({_ping:true}),
+      signal:ctrl.signal,
+      mode:'cors',
+    });
+    clearTimeout(tid);
+    // Any 2xx/4xx with body = workflow registered & responding (even if rejecting payload)
+    // 404 from n8n means webhook NOT registered → still down
+    if(res.status === 404){
+      txt.textContent = 'workflow not yet registered';
+      return false;
+    }
+    return true;
+  }catch(e){
+    txt.textContent = e.name === 'AbortError' ? 'timeout — retrying' : 'unreachable — retrying';
+    return false;
+  }
+}
+
+async function tick(){
+  txt.textContent = 'probing endpoint…';
+  probe.classList.remove('up');
+  const ok = await pingEndpoint();
+  if(ok){
+    probe.classList.add('up');
+    stepEl.classList.remove('todo');
+    stepEl.classList.add('done');
+    txt.textContent = 'endpoint live — reloading…';
+    setTimeout(()=>{ window.location.href = REDIRECT_TO; }, 2500);
+    return;
+  }
+  setTimeout(tick, PROBE_INTERVAL_MS);
+}
+
+// kick off after a short delay so animation reads as "checking"
+setTimeout(tick, 1200);
+</script>
+
+</body>
+</html>
