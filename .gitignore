@@ -33,3 +33,9 @@ temp/
 
 # Local backups of n8n workflows (keep tracked)
 workflows/*.bak.json
+
+# Claude Code session state
+.claude/
+
+# Bundled governance attachments (files duplicated at repo root)
+files/
