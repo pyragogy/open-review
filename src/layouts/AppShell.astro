@@ -1,0 +1,165 @@
+---
+/**
+ * AppShell.astro — top-level layout for every Open Review page.
+ *
+ * Renders:
+ *   1. Atmosphere layer    (.atmos + .stars + .grain — fixed, decorative)
+ *   2. Header              (logo + edition badge)
+ *   3. Slot                (page-specific content; chapter pages add their own
+ *                           three-pane grid inside this slot)
+ *   4. ProvenanceFooter    (R9 + R10 + R7)
+ *
+ * Pages that need the three-pane layout (chapter pages) compose
+ * `ChapterPage.astro` on top of this shell — AppShell stays
+ * intentionally agnostic about the inner grid so home/about/category
+ * pages can use a centered editorial layout instead.
+ */
+import '@styles/global.css';
+import { SITE } from '@data/site';
+import ProvenanceFooter from '@components/ProvenanceFooter.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Set false on pages where the CC-Zero attribution doesn't apply
+   *  (e.g. the Phase II waitlist). */
+  showAttribution?: boolean;
+  /** Page-level OG image override. Defaults to the edition OG. */
+  ogImage?: string;
+}
+
+const {
+  title       = SITE.title,
+  description = SITE.tagline,
+  showAttribution = true,
+  ogImage     = `${SITE.baseUrl}/og-${SITE.edition}.png`,
+} = Astro.props;
+
+const fullTitle = title === SITE.title ? title : `${title} — ${SITE.title}`;
+const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d0a18" />
+    <meta name="referrer"    content="no-referrer" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph + Twitter -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonical} />
+    <meta property="og:title"       content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    <!-- Favicon: violet glyph, inline SVG (no extra request, no Cloudflare). -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%23a78bfa' stroke-width='1.4'/><circle cx='16' cy='16' r='3' fill='%23a78bfa'/></svg>" />
+  </head>
+
+  <body>
+    <div class="atmos" aria-hidden="true"></div>
+    <div class="stars" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="shell">
+      <header class="masthead">
+        <a class="brand" href="/" aria-label="Open Review home">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="brand-glyph"></span>
+          </span>
+          <span class="brand-name">
+            Pyragogy <span class="brand-sep">·</span> <em>Open Review</em>
+          </span>
+        </a>
+        <span class="edition meta-xs">Edition {SITE.edition}</span>
+      </header>
+
+      <main id="main">
+        <slot />
+      </main>
+
+      <ProvenanceFooter attribution={showAttribution} />
+    </div>
+  </body>
+</html>
+
+<style>
+  .masthead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem clamp(1.5rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: var(--paper-fade);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: color 0.15s;
+  }
+  .brand:hover { color: var(--paper); }
+
+  .brand-mark {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--violet);
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+  }
+  .brand-glyph {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--violet);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .brand-name em {
+    color: var(--violet-pale);
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .brand-sep { opacity: 0.4; padding: 0 0.2em; }
+
+  .edition {
+    color: var(--violet-pale);
+  }
+
+  main {
+    min-height: 60vh;
+  }
+
+  @media (max-width: 480px) {
+    .brand {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+    }
+    .brand-name em { font-size: 0.85rem; }
+  }
+</style>

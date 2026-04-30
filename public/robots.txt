@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://open-review.pyragogy.org/sitemap-index.xml

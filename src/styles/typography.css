@@ -1,0 +1,100 @@
+/**
+ * typography.css — Open Review 2026
+ *
+ * Charter (true italic, open) for body and headings.
+ * JetBrains Mono for UI/metadata (badges, breadcrumbs, edition labels).
+ *
+ * Hoefler Text was named in earlier R20 drafts but is proprietary
+ * (Adobe), not legally self-hostable. Charter has its own real italic
+ * and carries the editorial register on its own — see DECISIONS.md D7.
+ *
+ * Self-hosted woff2 files live in /public/fonts/ and are loaded with
+ * `font-display: swap` per R17 (no third-party font CDNs).
+ *
+ * NOTE: Step 1 ships with the system fallbacks (Charter is widely
+ * available on macOS and Linux distributions). Adding the woff2 files
+ * is a Step 6 polish task.
+ */
+
+@font-face {
+  font-family: 'Charter';
+  src: local('Charter'), local('CharterBT-Roman'), local('Bitstream Charter');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Charter';
+  src: local('Charter Italic'), local('CharterBT-Italic'), local('Bitstream Charter Italic');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Charter';
+  src: local('Charter Bold'), local('CharterBT-Bold'), local('Bitstream Charter Bold');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Charter';
+  src: local('Charter Bold Italic'), local('CharterBT-BoldItalic');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono'), local('JetBrainsMono-Regular');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono Medium'), local('JetBrainsMono-Medium');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Editorial baseline. */
+html {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern', 'liga', 'onum';
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  min-height: 100vh;
+}
+
+/* UI/metadata register. */
+.meta,
+[data-meta] {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--paper-fade);
+}
+
+.meta-xs,
+[data-meta-xs] {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-fade);
+}

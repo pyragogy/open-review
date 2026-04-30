@@ -1,0 +1,74 @@
+/**
+ * tokens.css — Open Review 2026 design tokens
+ *
+ * Ported from site/maintenance/index.html (April 2026 editorial broadside)
+ * + Obliqo agent palette (semantic colors for the four voices) with the
+ * R20 amber-to-violet substitution for the Editorial Brief.
+ *
+ * Mirrored as Tailwind theme.extend in tailwind.config.js — change here
+ * AND there if you're touching a token, otherwise the two will drift.
+ */
+
+:root {
+  /* ── Background ramp (ink-violet) ─────────────────────────────────── */
+  --ink:        #0d0a18;
+  --ink-soft:   #14102a;
+  --paper:      #ece6f5;
+  --paper-mute: #b6acc9;
+  --paper-fade: #6e6587;
+  --rule:       rgba(236, 230, 245, 0.08);
+  --rule-soft:  rgba(236, 230, 245, 0.04);
+
+  /* ── Brand violets ────────────────────────────────────────────────── */
+  --violet:      #a78bfa;
+  --violet-deep: #6d28d9;
+  --violet-pale: #d8b4fe;
+
+  /* ── Agent voice palette ──────────────────────────────────────────── */
+  /* Semantic, not brand. Mirrors Obliqo with one substitution: editor
+     uses violet (this project) instead of amber (Obliqo). */
+  --agent-researcher: #6366f1;
+  --agent-resonance:  #10b981;
+  --agent-distortion: #f43f5e;
+  --agent-editor:     #a78bfa;
+
+  /* Hover/dim variants for agent cards */
+  --agent-researcher-bg: rgba(99, 102, 241, 0.08);
+  --agent-resonance-bg:  rgba(16, 185, 129, 0.08);
+  --agent-distortion-bg: rgba(244, 63, 94, 0.08);
+  --agent-editor-bg:     rgba(167, 139, 250, 0.08);
+
+  /* ── Score palette ────────────────────────────────────────────────── */
+  --score-urgent:       #f87171;   /* rose — high risk */
+  --score-important:    #c4b5fd;   /* violet-pale — replaces amber for in-brand consistency */
+  --score-nice:         #34d399;   /* emerald */
+  --score-urgent-bg:    rgba(239, 68, 68, 0.08);
+  --score-important-bg: rgba(196, 181, 253, 0.08);
+  --score-nice-bg:      rgba(16, 185, 129, 0.08);
+
+  /* ── Reserved Obliqo CTA color ────────────────────────────────────── */
+  /* Use ONLY in the "Powered by Obliqo" footer link (R10 + R20). */
+  --obliqo-cta: #f59e0b;
+
+  /* ── Typography (R20 + D7) ────────────────────────────────────────── */
+  --font-serif: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria,
+                'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas,
+                'Liberation Mono', monospace;
+
+  /* ── Layout ───────────────────────────────────────────────────────── */
+  --shell-maxw: 1180px;
+  --pad-x:      clamp(1.5rem, 5vw, 5rem);
+  --pad-y:      clamp(2rem, 6vh, 4.5rem);
+
+  /* ── Three-pane grid (chapter view) ───────────────────────────────── */
+  --sidebar-w:  220px;
+  --review-w:   360px;
+  --header-h:   56px;
+}
+
+/* Selection follows the editorial broadside palette. */
+::selection {
+  background: var(--violet-deep);
+  color: var(--paper);
+}

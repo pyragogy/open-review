@@ -1,0 +1,135 @@
+---
+/**
+ * index.astro — homepage placeholder for the Step 1 baseline.
+ *
+ * Step 5 will replace this with the proper editorial manifesto + CTA
+ * to explore the catalog. For now: a single-column eyebrow + headline
+ * + lede that proves the AppShell + ProvenanceFooter render correctly
+ * and the design tokens behave under the Lighthouse audit (R16).
+ */
+import AppShell from '@layouts/AppShell.astro';
+import { SITE } from '@data/site';
+import { CHAPTER_COUNT, CATEGORIES } from '@data/catalog';
+---
+
+<AppShell
+  title={SITE.title}
+  description={SITE.tagline}
+>
+  <section class="manifesto">
+    <p class="eyebrow">An interlude</p>
+    <h1>
+      <span class="break">Fifty chapters of the</span>
+      <span class="break"><em>Peeragogy Handbook</em>,</span>
+      <span class="break">re-read by four AI agents.</span>
+    </h1>
+
+    <p class="subhead">
+      One static artifact, generated once per year. No login. No quota.
+      No surveillance. The reading is the product.
+    </p>
+
+    <ul class="figures meta-xs">
+      <li><strong>{CHAPTER_COUNT}</strong> chapters</li>
+      <li><strong>{CATEGORIES.length}</strong> categories</li>
+      <li><strong>4</strong> agent voices</li>
+      <li>Refreshed annually</li>
+    </ul>
+
+    <p class="status meta-xs">
+      <span class="dot" aria-hidden="true"></span>
+      Status — Foundation scaffold (Step 1 of 8)
+    </p>
+  </section>
+</AppShell>
+
+<style>
+  .manifesto {
+    max-width: var(--shell-maxw);
+    margin: 0 auto;
+    padding: clamp(3rem, 10vh, 7rem) clamp(1.5rem, 5vw, 5rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin: 0 0 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--violet);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6.4vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin: 0 0 1.6rem;
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+  h1 .break { display: block; }
+  h1 em {
+    color: var(--violet-pale);
+    font-style: italic;
+  }
+
+  .subhead {
+    font-family: var(--font-serif);
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--paper-mute);
+    max-width: 36ch;
+    font-style: italic;
+    margin: 0 0 2.4rem;
+  }
+
+  .figures {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2rem;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+  }
+  .figures li { color: var(--paper-fade); }
+  .figures strong {
+    color: var(--paper);
+    font-weight: 500;
+    margin-right: 0.4em;
+    font-size: 1.05rem;
+    font-family: var(--font-serif);
+    font-style: normal;
+  }
+
+  .status {
+    margin-top: 3rem;
+    color: var(--violet-pale);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .status .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+  }
+</style>
