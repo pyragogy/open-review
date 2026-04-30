@@ -69,15 +69,20 @@
   /* The single permitted use of amber in this codebase (R20 + R10). */
   --obliqo: #f59e0b;
 
-  /* ── Typography (D9 — hybrid Scenario C) ─────────────────────────── */
-  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  /* ── Typography (D9 — hybrid Scenario C, revised → Cormorant) ────── */
+  /* Cormorant Garamond replaces Fraunces as the display register
+     (D10 supersedes D9). OFL-licensed Didone-adjacent serif, true
+     italic, hairline 300 / regular 400 / medium 500 / semibold 600.
+     No opsz/SOFT axes — the family is designed for display sizes by
+     construction; drop-cap contrast comes from weight 300 alone. */
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-  /* Variable-axis defaults — overridable per-element. */
-  --fraunces-display: "opsz" 144, "SOFT" 30, "wght" 400;
-  --fraunces-soft:    "opsz" 96,  "SOFT" 60, "wght" 400;
-  --fraunces-sharp:   "opsz" 144, "SOFT" 0,  "wght" 400;
+  /* Display weight presets — replace the variable-axis tokens. */
+  --display-hairline: 300;   /* drop cap, large display headlines */
+  --display-regular:  400;   /* standfirst, soft phrases */
+  --display-medium:   500;   /* category names, sub-display */
 
   /* ── Layout ──────────────────────────────────────────────────────── */
   --shell-maxw: 1180px;

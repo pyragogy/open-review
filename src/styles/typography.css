@@ -1,13 +1,17 @@
 /**
- * typography.css — Open Review 2026 (Hybrid Scenario C, D9)
+ * typography.css — Open Review 2026 (D10 supersedes D9)
  *
  * Three families:
- *   - Fraunces (variable: opsz, wght, SOFT) — display, editorial titles,
- *     decorative italics. Carries the broadside register.
- *   - Inter — body and UI, continuity with Obliqo, optimised for review
- *     reading at 17px.
+ *   - Cormorant Garamond — display, editorial titles, drop caps,
+ *     italic emphasis. Christian Thalmann's OFL-licensed reinterpretation
+ *     of Garamond with Didone-adjacent contrast. Carries the broadside
+ *     register: hairline strokes, expressive italic, weights 300–600
+ *     plus italic. No optical-size or softness axes — display contrast
+ *     comes from the hairline 300 weight by construction.
+ *   - Inter — body and UI. Continuity with Obliqo. Optimised for
+ *     review reading at 17px baseline.
  *   - JetBrains Mono — metadata, edition badges, provenance, edition
- *     counts inside the meta-band.
+ *     counts inline in prose, mono-numeric counts in the catalog strip.
  *
  * Loading: Google Fonts CDN during Step 1.5 iteration. Self-hosting all
  * three families as woff2 in src/assets/fonts/ is a Step 6 polish task
@@ -15,8 +19,9 @@
  * preconnect to fonts.googleapis.com and fonts.gstatic.com is required
  * and CSP allows both domains for style-src and font-src respectively.
  *
- * Hoefler Text was named in the original R20 draft — superseded by D9.
- * Charter (the Step 1 fallback) is also superseded.
+ * Earlier drafts named Hoefler Text (proprietary), Charter (Step 1
+ * fallback), and Fraunces (D9). All superseded by Cormorant Garamond
+ * (D10) — see DECISIONS.md.
  */
 
 /* Editorial baseline. */
@@ -36,34 +41,39 @@ body {
   min-height: 100vh;
 }
 
-/* Display register — Fraunces italic, slightly soft for warmth. */
+/* Display register — Cormorant italic, hairline 300 for headlines,
+   regular 400 for soft tone. Letter-spacing tightened slightly because
+   Didone-adjacent serifs read better with negative tracking at display
+   sizes. */
 .display,
 [data-display] {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 400;
-  font-variation-settings: var(--fraunces-display);
+  font-weight: var(--display-hairline);
   letter-spacing: -0.012em;
   line-height: 1.05;
 }
 
 /* Soft variant — used for the standfirst, the colophon italic phrases,
-   and category names in the catalog strip. Lower opsz, higher SOFT. */
+   and category names in the catalog strip. Regular weight, looser
+   line-height. */
 .display-soft,
 [data-display-soft] {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 400;
-  font-variation-settings: var(--fraunces-soft);
+  font-weight: var(--display-regular);
+  letter-spacing: 0;
+  line-height: 1.4;
 }
 
-/* Sharp variant — drop cap. Full optical size, zero softness. */
+/* Sharp variant — drop cap and accent. Hairline weight pushes the
+   contrast that Didone-adjacent serifs were built for. */
 .display-sharp,
 [data-display-sharp] {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 400;
-  font-variation-settings: var(--fraunces-sharp);
+  font-weight: var(--display-hairline);
+  letter-spacing: -0.02em;
 }
 
 /* Mono register — metadata and counts. */

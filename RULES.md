@@ -79,16 +79,16 @@ User-facing copy can be in Italian where it feels natural (founder's voice, audi
 ### R19 — Voice: editorial broadside, not SaaS landing
 Tone is closer to a literary review than to a product page. No "Sign up now!", no "Boost your productivity!", no marketing CTAs in body content. The single CTA is the footer link to Obliqo, written soberly.
 
-### R20 — Visual identity: ink-violet, Hybrid Scenario C typography
+### R20 — Visual identity: ink-violet, Hybrid Scenario C (Cormorant) typography
 Inherited from the maintenance page (April 2026). Asymmetric editorial layouts. Grain texture overlay. Two radial violet drifts (32s ease-in-out alternate). Dark editorial atmosphere.
 
-**Typography (D9 — Hybrid Scenario C):**
+**Typography (D10 supersedes D9 — Hybrid Scenario C with Cormorant Garamond):**
 
-- **Fraunces** (variable: `opsz`, `wght`, `SOFT` axes) — display, editorial titles, drop caps, decorative italics. The drop cap on the homepage uses `font-variation-settings: "opsz" 144, "SOFT" 0` for maximum optical size at zero softness. Soft-tone phrases (standfirst, colophon italics, category names) use `"opsz" 96, "SOFT" 60` for warmth.
+- **Cormorant Garamond** (Christian Thalmann, OFL-licensed) — display, editorial titles, drop caps, decorative italics. Didone-adjacent reinterpretation of Garamond with hairline contrast. Weights 300/400/500/600 plus italic, no optical-size or softness axes — display contrast comes from the hairline 300 weight by construction. The drop cap on the homepage uses `font-weight: 300` at 4.8em for maximum stroke contrast. Soft-tone phrases (standfirst, colophon italics, category names) use weight 400 italic.
 - **Inter** (variable: `wght` axis) — body and UI. Continuity with Obliqo. Optimised for review reading at 17px baseline.
 - **JetBrains Mono** — metadata, edition badges, provenance, edition counts inline in prose, mono-numeric counts in the catalog strip.
 
-Charter and Hoefler Text were named in earlier drafts and superseded by D9. The hybrid resolves a real tension the earlier drafts could not: editorial register (Fraunces italic) needs sharper contrast with Obliqo's Inter sans for the four-voice cards on chapter pages, and shipping three families costs less than expected because Inter is already paid for by reuse from Obliqo.
+Charter, Hoefler Text, and Fraunces were named in earlier drafts and superseded by D10. Cormorant Garamond is OFL-licensed (legal self-host R17), Google-Fonts-available (fast Step 1.5 iteration), and Didone-adjacent in contrast — closer to the original R20 Hoefler Text intent than Fraunces' warmer humanist take. The hybrid still resolves the chapter-page composition need (display register distinct from Obliqo's Inter) while aligning more closely with the broadside register the editorial direction is built on.
 
 Self-hosting all three families as woff2 in `src/assets/fonts/` is a Step 6 polish task before deploy (R17 compliance). During Step 1.5 iteration we load from Google Fonts CDN.
 

@@ -109,15 +109,16 @@ import { CHAPTER_COUNT, CATEGORIES } from '@data/catalog';
     font-style: italic;
   }
 
-  /* ── Drop cap: three lines tall, opsz 144 SOFT 0 ──────────────────── */
+  /* ── Drop cap: three lines tall, hairline 300 (Cormorant Garamond
+   *  has no opsz/SOFT axes — the Didone-adjacent contrast is baked in
+   *  at weight 300, which renders sharp at display sizes by design). */
   .dropcap {
     float: left;
     font-family: var(--font-display);
     font-style: italic;
-    font-weight: 400;
-    font-variation-settings: "opsz" 144, "SOFT" 0, "wght" 400;
+    font-weight: 300;
     color: var(--violet-3);
-    font-size: 4.6em;
+    font-size: 4.8em;
     line-height: 0.86;
     margin: 0.05em 0.06em 0 0;
     user-select: none;

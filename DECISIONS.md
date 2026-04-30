@@ -99,6 +99,7 @@ The output remains compatible with R12 (plain web first) and R16 (Lighthouse per
 ---
 
 ## D9 — Typography: Hybrid Scenario C (Fraunces + Inter + JetBrains Mono)
+*Superseded by D10. Kept here for historical context.*
 
 **Decision:** Open Review 2026 ships a three-family hybrid typography system. Fraunces (variable: `opsz`, `wght`, `SOFT`) carries the display register — drop caps, editorial titles, italic emphasis. Inter (variable: `wght`) carries body and UI text. JetBrains Mono carries metadata, badges, inline numerals.
 
@@ -106,10 +107,27 @@ The output remains compatible with R12 (plain web first) and R16 (Lighthouse per
 
 The drop-cap "F" on the homepage demonstrates the upper bound: `opsz 144, SOFT 0` at 4.6em pulls the maximum optical size and the sharpest contrast Fraunces can produce, which is exactly the broadside posture that distinguishes Open Review from Obliqo's product-app register.
 
-**Consequences:**
+**Consequences (initial, before D10 supersession):**
 - R20 was rewritten to reflect the hybrid stack (Fraunces / Inter / JetBrains Mono); Hoefler Text and Charter references are removed from authoritative governance.
 - Step 6 polish task added: self-host all three families as woff2 in `src/assets/fonts/` before the Step 7 deploy (R17 compliance). Step 1.5 iterates with Google Fonts CDN; the CSP in `netlify.toml` allows `fonts.googleapis.com` (style-src) and `fonts.gstatic.com` (font-src) accordingly.
 - The catalog-strip and colophon italics use the `--fraunces-soft` variation (`opsz 96, SOFT 60`) — softer warmth, not the sharp display register.
+
+---
+
+## D10 — Display register: Cormorant Garamond replaces Fraunces
+
+**Decision:** Cormorant Garamond (Christian Thalmann, SIL OFL 1.1) replaces Fraunces as the display family in the Hybrid Scenario C stack. Inter and JetBrains Mono are unchanged. The variable-axis variables (`--fraunces-display`, `--fraunces-soft`, `--fraunces-sharp`) are retired in favour of plain weight presets (`--display-hairline: 300`, `--display-regular: 400`, `--display-medium: 500`).
+
+**Why:** The founder reviewed the Step 1.5 home and a curated list of editorial typefaces, then asked Claude to pick. The list (designworklife.com "Elegant fonts that exude sophistication & style") was useful for direction but proprietary across the board — none self-hostable for an OFL-spirit artifact. Cormorant Garamond is the closest open match to the *intent* the list represented (Didone-adjacent contrast, expressive italic, hairline weight that cuts a page like a Didot) while keeping the project's licensing posture honest.
+
+A second motivation: Fraunces' warmer humanist character softened the broadside register more than the editorial direction wanted. The original R20 draft named Hoefler Text; Cormorant Garamond is the closest open-source cousin to that intent. The `opsz`/`SOFT` axes were elegant engineering, but they were solving a problem (display polish) that Cormorant solves by construction at weight 300.
+
+**Consequences:**
+- R20 rewritten to reflect Cormorant + Inter + JetBrains Mono.
+- `tokens.css`, `typography.css`, `AppShell.astro` (Google Fonts link), `index.astro` (drop-cap weight 300, no `font-variation-settings`), `Colophon.astro` (Obliqo CTA), `Asterism.astro` (asterism weight) all updated.
+- Step 6 self-host task is now: Cormorant Garamond ital+upright × {300,400,500,600} = 8 woff2 files (~120 KB subsetted Latin-Ext), plus Inter and JetBrains Mono as before.
+- Drop-cap and asterism rendering depends on Cormorant's hairline 300 italic — verify this weight is loaded in the Google Fonts URL before any visual review.
+- D9 stays in this file as historical context, marked superseded.
 
 ---
 
