@@ -1,77 +1,32 @@
 /**
- * typography.css — Open Review 2026
+ * typography.css — Open Review 2026 (Hybrid Scenario C, D9)
  *
- * Charter (true italic, open) for body and headings.
- * JetBrains Mono for UI/metadata (badges, breadcrumbs, edition labels).
+ * Three families:
+ *   - Fraunces (variable: opsz, wght, SOFT) — display, editorial titles,
+ *     decorative italics. Carries the broadside register.
+ *   - Inter — body and UI, continuity with Obliqo, optimised for review
+ *     reading at 17px.
+ *   - JetBrains Mono — metadata, edition badges, provenance, edition
+ *     counts inside the meta-band.
  *
- * Hoefler Text was named in earlier R20 drafts but is proprietary
- * (Adobe), not legally self-hostable. Charter has its own real italic
- * and carries the editorial register on its own — see DECISIONS.md D7.
+ * Loading: Google Fonts CDN during Step 1.5 iteration. Self-hosting all
+ * three families as woff2 in src/assets/fonts/ is a Step 6 polish task
+ * (R17 compliance). The link tags live in AppShell.astro <head>;
+ * preconnect to fonts.googleapis.com and fonts.gstatic.com is required
+ * and CSP allows both domains for style-src and font-src respectively.
  *
- * Self-hosted woff2 files live in /public/fonts/ and are loaded with
- * `font-display: swap` per R17 (no third-party font CDNs).
- *
- * NOTE: Step 1 ships with the system fallbacks (Charter is widely
- * available on macOS and Linux distributions). Adding the woff2 files
- * is a Step 6 polish task.
+ * Hoefler Text was named in the original R20 draft — superseded by D9.
+ * Charter (the Step 1 fallback) is also superseded.
  */
-
-@font-face {
-  font-family: 'Charter';
-  src: local('Charter'), local('CharterBT-Roman'), local('Bitstream Charter');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Charter';
-  src: local('Charter Italic'), local('CharterBT-Italic'), local('Bitstream Charter Italic');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Charter';
-  src: local('Charter Bold'), local('CharterBT-Bold'), local('Bitstream Charter Bold');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Charter';
-  src: local('Charter Bold Italic'), local('CharterBT-BoldItalic');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: local('JetBrains Mono'), local('JetBrainsMono-Regular');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: local('JetBrains Mono Medium'), local('JetBrainsMono-Medium');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* Editorial baseline. */
 html {
-  font-family: var(--font-serif);
+  font-family: var(--font-body);
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'kern', 'liga', 'onum';
+  font-feature-settings: 'kern', 'liga', 'cv11';
   text-rendering: optimizeLegibility;
 }
 
@@ -81,13 +36,43 @@ body {
   min-height: 100vh;
 }
 
-/* UI/metadata register. */
+/* Display register — Fraunces italic, slightly soft for warmth. */
+.display,
+[data-display] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: var(--fraunces-display);
+  letter-spacing: -0.012em;
+  line-height: 1.05;
+}
+
+/* Soft variant — used for the standfirst, the colophon italic phrases,
+   and category names in the catalog strip. Lower opsz, higher SOFT. */
+.display-soft,
+[data-display-soft] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: var(--fraunces-soft);
+}
+
+/* Sharp variant — drop cap. Full optical size, zero softness. */
+.display-sharp,
+[data-display-sharp] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: var(--fraunces-sharp);
+}
+
+/* Mono register — metadata and counts. */
 .meta,
 [data-meta] {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  color: var(--paper-fade);
+  color: var(--mono-fg);
 }
 
 .meta-xs,
@@ -96,5 +81,14 @@ body {
   font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--paper-fade);
+  color: var(--mono-dim);
+}
+
+/* Inline mono — used for numbers in the meta-band ("Fifty chapters"). */
+.mono-inline,
+[data-mono-inline] {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--violet-3);
+  letter-spacing: 0.02em;
 }

@@ -79,10 +79,18 @@ User-facing copy can be in Italian where it feels natural (founder's voice, audi
 ### R19 — Voice: editorial broadside, not SaaS landing
 Tone is closer to a literary review than to a product page. No "Sign up now!", no "Boost your productivity!", no marketing CTAs in body content. The single CTA is the footer link to Obliqo, written soberly.
 
-### R20 — Visual identity: ink-violet
-Inherited from the maintenance page (April 2026). Charter (true italic) for body and headings, JetBrains Mono for UI/metadata. Asymmetric layouts. Grain texture. Two radial washes drift. Dark editorial atmosphere.
+### R20 — Visual identity: ink-violet, Hybrid Scenario C typography
+Inherited from the maintenance page (April 2026). Asymmetric editorial layouts. Grain texture overlay. Two radial violet drifts (32s ease-in-out alternate). Dark editorial atmosphere.
 
-Hoefler Text was named in earlier drafts but is proprietary (Adobe), not legally self-hostable, and offered no fallback parity that justified the licensing risk. Charter ships a real italic and is open — it carries the editorial register on its own.
+**Typography (D9 — Hybrid Scenario C):**
+
+- **Fraunces** (variable: `opsz`, `wght`, `SOFT` axes) — display, editorial titles, drop caps, decorative italics. The drop cap on the homepage uses `font-variation-settings: "opsz" 144, "SOFT" 0` for maximum optical size at zero softness. Soft-tone phrases (standfirst, colophon italics, category names) use `"opsz" 96, "SOFT" 60` for warmth.
+- **Inter** (variable: `wght` axis) — body and UI. Continuity with Obliqo. Optimised for review reading at 17px baseline.
+- **JetBrains Mono** — metadata, edition badges, provenance, edition counts inline in prose, mono-numeric counts in the catalog strip.
+
+Charter and Hoefler Text were named in earlier drafts and superseded by D9. The hybrid resolves a real tension the earlier drafts could not: editorial register (Fraunces italic) needs sharper contrast with Obliqo's Inter sans for the four-voice cards on chapter pages, and shipping three families costs less than expected because Inter is already paid for by reuse from Obliqo.
+
+Self-hosting all three families as woff2 in `src/assets/fonts/` is a Step 6 polish task before deploy (R17 compliance). During Step 1.5 iteration we load from Google Fonts CDN.
 
 **Agent voice palette** (semantic, not brand):
 
@@ -91,7 +99,9 @@ Hoefler Text was named in earlier drafts but is proprietary (Adobe), not legally
 - Distortion Pattern → rose `#f43f5e`
 - Editorial Brief → violet `#a78bfa` — distinct from Obliqo amber but coherent with the ink-violet brand family
 
-Amber `#f59e0b` is reserved for Obliqo. Do not use in Open Review except in the explicit "powered by Obliqo" link.
+**Eight-stop violet ramp** (`--violet-1` through `--violet-7` plus `--violet-ink`) — see `src/styles/tokens.css`. The ramp underpins every editorial accent: `--violet-3` carries primary emphasis (drop cap, "Peeragogy Handbook" inside the headline, `<span class="em">` highlights, mono-inline numbers in the meta-band).
+
+Amber `#f59e0b` is reserved for Obliqo and lives ONLY in the `--obliqo` token. The Powered-by-Obliqo CTA in `Colophon.astro` is its single permitted use. Verified at build time by greppping `dist/_astro/*.css` for the literal — the only matches must be the token definition and the `.obliqo-link` rule.
 
 ### R21 — Slowness is okay
 This is not a SaaS dashboard. Animations can be slow. Reveals can be staggered. The reading experience is the product. `prefers-reduced-motion` is respected.

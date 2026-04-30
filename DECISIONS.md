@@ -96,6 +96,23 @@ The output remains compatible with R12 (plain web first) and R16 (Lighthouse per
 
 ---
 
+---
+
+## D9 — Typography: Hybrid Scenario C (Fraunces + Inter + JetBrains Mono)
+
+**Decision:** Open Review 2026 ships a three-family hybrid typography system. Fraunces (variable: `opsz`, `wght`, `SOFT`) carries the display register — drop caps, editorial titles, italic emphasis. Inter (variable: `wght`) carries body and UI text. JetBrains Mono carries metadata, badges, inline numerals.
+
+**Why:** Earlier drafts of R20 named Hoefler Text (proprietary, not self-hostable) and then Charter (open, but no contrast against Obliqo's Inter when chapter pages eventually compose four-voice cards from the Obliqo design system). Scenario C resolves the actual problem: the homepage needs an editorial broadside register *and* the chapter pages need to compose against Inter-based Obliqo components without the two registers fighting each other. Three families look like more cost than one, but Inter is already paid for by reuse from Obliqo, and Fraunces ships a single variable file that covers display + soft + sharp axes.
+
+The drop-cap "F" on the homepage demonstrates the upper bound: `opsz 144, SOFT 0` at 4.6em pulls the maximum optical size and the sharpest contrast Fraunces can produce, which is exactly the broadside posture that distinguishes Open Review from Obliqo's product-app register.
+
+**Consequences:**
+- R20 was rewritten to reflect the hybrid stack (Fraunces / Inter / JetBrains Mono); Hoefler Text and Charter references are removed from authoritative governance.
+- Step 6 polish task added: self-host all three families as woff2 in `src/assets/fonts/` before the Step 7 deploy (R17 compliance). Step 1.5 iterates with Google Fonts CDN; the CSP in `netlify.toml` allows `fonts.googleapis.com` (style-src) and `fonts.gstatic.com` (font-src) accordingly.
+- The catalog-strip and colophon italics use the `--fraunces-soft` variation (`opsz 96, SOFT 60`) — softer warmth, not the sharp display register.
+
+---
+
 ## Open questions (to resolve during execution)
 
 The 12 OQs from the operational plan are tracked in the plan file (`brief-per-claude-floating-wombat.md`, section 8). Defaults are proposed for each; this DECISIONS.md will be updated as each is confirmed, deferred, or revised.

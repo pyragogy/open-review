@@ -1,67 +1,90 @@
 /**
  * tokens.css — Open Review 2026 design tokens
  *
- * Ported from site/maintenance/index.html (April 2026 editorial broadside)
- * + Obliqo agent palette (semantic colors for the four voices) with the
- * R20 amber-to-violet substitution for the Editorial Brief.
+ * Migrated from the approved homepage prototype (Step 1.5).
+ * Eight-stop violet ramp, paper tones, mono fg/dim, rule lines.
  *
- * Mirrored as Tailwind theme.extend in tailwind.config.js — change here
- * AND there if you're touching a token, otherwise the two will drift.
+ * Mirrored as Tailwind theme.extend in tailwind.config.js — change
+ * here AND there if you're touching a token, otherwise the two will
+ * drift.
+ *
+ * R20 boundary: amber #f59e0b lives ONLY in --obliqo and is consumed
+ *   ONLY by the "Powered by Obliqo" CTA. Verified at build time by
+ *   greppping dist/_astro/*.css for the literal.
  */
 
 :root {
-  /* ── Background ramp (ink-violet) ─────────────────────────────────── */
+  /* ── Eight-stop violet ramp ───────────────────────────────────────── */
+  /* Sorted light → dark. The ramp underpins every editorial accent.   */
+  --violet-1: #ede9fe;   /* near-paper, used for selection background  */
+  --violet-2: #c4b5fd;   /* asterism, soft decorative                  */
+  --violet-3: #a78bfa;   /* primary editorial accent — drop cap, em,
+                              "Peeragogy Handbook" inside the headline,
+                              meta numbers in JetBrains Mono           */
+  --violet-4: #8b5cf6;   /* hover state for CTAs                       */
+  --violet-5: #7c3aed;   /* atmospheric drift A                        */
+  --violet-6: #6d28d9;   /* atmospheric drift B                        */
+  --violet-7: #4c1d95;   /* deepest atmospheric tone                   */
+  --violet-ink: #14102a; /* one nudge above the body bg, used for cards */
+
+  /* Body background and the soft variant under low-contrast surfaces. */
   --ink:        #0d0a18;
   --ink-soft:   #14102a;
-  --paper:      #ece6f5;
-  --paper-mute: #b6acc9;
-  --paper-fade: #6e6587;
-  --rule:       rgba(236, 230, 245, 0.08);
-  --rule-soft:  rgba(236, 230, 245, 0.04);
 
-  /* ── Brand violets ────────────────────────────────────────────────── */
-  --violet:      #a78bfa;
-  --violet-deep: #6d28d9;
-  --violet-pale: #d8b4fe;
+  /* ── Paper tones (text ramp) ─────────────────────────────────────── */
+  --paper:      #ece6f5;   /* primary text                              */
+  --paper-mute: #b6acc9;   /* secondary text, mono baseline             */
+  --paper-fade: #6e6587;   /* tertiary text, mono dim                   */
 
-  /* ── Agent voice palette ──────────────────────────────────────────── */
-  /* Semantic, not brand. Mirrors Obliqo with one substitution: editor
-     uses violet (this project) instead of amber (Obliqo). */
+  /* ── Mono register (typography helpers) ──────────────────────────── */
+  --mono-fg:  var(--paper-mute);
+  --mono-dim: var(--paper-fade);
+
+  /* ── Rule lines (faint editorial separators) ─────────────────────── */
+  --rule:      rgba(236, 230, 245, 0.08);
+  --rule-soft: rgba(236, 230, 245, 0.04);
+
+  /* ── Agent voice palette (semantic, not brand) ───────────────────── */
+  /* Mirrors Obliqo with one substitution: Editorial Brief uses the
+     in-brand violet-3 instead of Obliqo amber (R20 + D7).             */
   --agent-researcher: #6366f1;
   --agent-resonance:  #10b981;
   --agent-distortion: #f43f5e;
-  --agent-editor:     #a78bfa;
+  --agent-editor:     var(--violet-3);
 
-  /* Hover/dim variants for agent cards */
   --agent-researcher-bg: rgba(99, 102, 241, 0.08);
   --agent-resonance-bg:  rgba(16, 185, 129, 0.08);
   --agent-distortion-bg: rgba(244, 63, 94, 0.08);
   --agent-editor-bg:     rgba(167, 139, 250, 0.08);
 
-  /* ── Score palette ────────────────────────────────────────────────── */
-  --score-urgent:       #f87171;   /* rose — high risk */
-  --score-important:    #c4b5fd;   /* violet-pale — replaces amber for in-brand consistency */
-  --score-nice:         #34d399;   /* emerald */
+  /* ── Score palette (workflow v2.2 enum-only) ─────────────────────── */
+  --score-urgent:       #f87171;
+  --score-important:    var(--violet-2);
+  --score-nice:         #34d399;
   --score-urgent-bg:    rgba(239, 68, 68, 0.08);
   --score-important-bg: rgba(196, 181, 253, 0.08);
   --score-nice-bg:      rgba(16, 185, 129, 0.08);
 
-  /* ── Reserved Obliqo CTA color ────────────────────────────────────── */
-  /* Use ONLY in the "Powered by Obliqo" footer link (R10 + R20). */
-  --obliqo-cta: #f59e0b;
+  /* ── Reserved Obliqo CTA ─────────────────────────────────────────── */
+  /* The single permitted use of amber in this codebase (R20 + R10). */
+  --obliqo: #f59e0b;
 
-  /* ── Typography (R20 + D7) ────────────────────────────────────────── */
-  --font-serif: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria,
-                'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-  --font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas,
-                'Liberation Mono', monospace;
+  /* ── Typography (D9 — hybrid Scenario C) ─────────────────────────── */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-  /* ── Layout ───────────────────────────────────────────────────────── */
+  /* Variable-axis defaults — overridable per-element. */
+  --fraunces-display: "opsz" 144, "SOFT" 30, "wght" 400;
+  --fraunces-soft:    "opsz" 96,  "SOFT" 60, "wght" 400;
+  --fraunces-sharp:   "opsz" 144, "SOFT" 0,  "wght" 400;
+
+  /* ── Layout ──────────────────────────────────────────────────────── */
   --shell-maxw: 1180px;
   --pad-x:      clamp(1.5rem, 5vw, 5rem);
   --pad-y:      clamp(2rem, 6vh, 4.5rem);
 
-  /* ── Three-pane grid (chapter view) ───────────────────────────────── */
+  /* Three-pane chapter view (Step 4–5). */
   --sidebar-w:  220px;
   --review-w:   360px;
   --header-h:   56px;
@@ -69,6 +92,6 @@
 
 /* Selection follows the editorial broadside palette. */
 ::selection {
-  background: var(--violet-deep);
+  background: var(--violet-7);
   color: var(--paper);
 }

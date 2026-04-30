@@ -1,0 +1,143 @@
+---
+/**
+ * Colophon.astro — three-column editorial footer.
+ *
+ * Renders on every page (replaces the Step 1 ProvenanceFooter).
+ * Three concerns, one column each:
+ *
+ *   1. Open Review provenance (R9): edition, generation date, engine
+ *      version, next refresh — JetBrains Mono with Fraunces italic for
+ *      the soft-tone phrase "quietly revised, once a year".
+ *
+ *   2. Powered by Obliqo (R10): the only authorised use of amber on
+ *      the page, framed as an editorial offering rather than a CTA.
+ *
+ *   3. Source attribution (R7): Howard Rheingold et al., 2012,
+ *      CC-Zero, fork link — JetBrains Mono baseline with Fraunces
+ *      italic for the source title.
+ */
+import { SITE } from '@data/site';
+
+interface Props {
+  /** Set false on pages where source attribution doesn't apply
+   *  (Phase II waitlist, 404). */
+  attribution?: boolean;
+}
+
+const { attribution = true } = Astro.props;
+const { edition, generatedDate, nextRefresh, engineVersion, obliqo, attribution: attr } = SITE;
+---
+
+<footer class="colophon">
+  <div class="colophon-grid">
+    <div class="col">
+      <p class="meta-xs col-eyebrow">Open Review · {edition}</p>
+      <p class="col-body">
+        Generated <span class="mono-inline">{generatedDate}</span> · Obliqo Engine <span class="mono-inline">{engineVersion}</span>.
+        <span class="display-soft soft-phrase">Quietly revised, once a year.</span>
+        Next refresh <span class="mono-inline">{nextRefresh}</span>.
+      </p>
+    </div>
+
+    <div class="col">
+      <p class="meta-xs col-eyebrow">{obliqo.label}</p>
+      <p class="col-body">
+        <a href={obliqo.url} class="obliqo-link" target="_blank" rel="noopener noreferrer">
+          {obliqo.cta}
+        </a>
+      </p>
+    </div>
+
+    {attribution && (
+      <div class="col">
+        <p class="meta-xs col-eyebrow">Source</p>
+        <p class="col-body">
+          Based on <a href={attr.sourceHome} target="_blank" rel="noopener noreferrer" class="display-soft soft-phrase">
+            {attr.sourceLabel}
+          </a> by {attr.sourceAuthors} ({attr.sourceYear}). {attr.sourceLicense}.
+          Forked at <a href={attr.sourceRepo} target="_blank" rel="noopener noreferrer" class="link-mono">
+            pyragogy/legacy-peeragogy-handbook
+          </a>.
+        </p>
+      </div>
+    )}
+  </div>
+</footer>
+
+<style>
+  .colophon {
+    border-top: 1px solid var(--rule);
+    padding: clamp(2.5rem, 6vh, 4rem) clamp(1.5rem, 5vw, 5rem);
+    margin-top: clamp(4rem, 10vh, 6rem);
+    color: var(--mono-fg);
+  }
+
+  .colophon-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    max-width: var(--shell-maxw);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .colophon-grid {
+      grid-template-columns: 1.2fr 1fr 1.4fr;
+      gap: 3rem;
+    }
+  }
+
+  .col { display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
+
+  .col-eyebrow {
+    color: var(--mono-dim);
+    margin: 0;
+  }
+
+  .col-body {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    line-height: 1.65;
+    color: var(--mono-fg);
+    margin: 0;
+  }
+
+  .col-body a {
+    color: var(--paper-mute);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .col-body a:hover,
+  .col-body a:focus-visible {
+    color: var(--violet-2);
+    border-bottom-color: var(--violet-3);
+    outline: none;
+  }
+
+  .soft-phrase {
+    font-size: 0.95rem;
+    color: var(--paper-mute);
+    display: inline;
+  }
+
+  .link-mono {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+  }
+
+  /* Amber lives only here. R20 boundary. */
+  .obliqo-link {
+    color: var(--obliqo) !important;
+    border-bottom-color: rgba(245, 158, 11, 0.35) !important;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    font-variation-settings: var(--fraunces-soft);
+  }
+  .obliqo-link:hover,
+  .obliqo-link:focus-visible {
+    color: #fbbf24 !important;
+    border-bottom-color: var(--obliqo) !important;
+  }
+</style>
