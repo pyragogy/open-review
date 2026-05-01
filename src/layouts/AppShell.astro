@@ -2,37 +2,42 @@
 /**
  * AppShell.astro — top-level layout for every Open Review page.
  *
- * Renders:
- *   1. Atmosphere layer    (.atmos + .stars + .grain — fixed, decorative)
- *   2. Masthead            (logo + edition badge)
- *   3. Slot                (page-specific content; chapter pages add
- *                           their own three-pane grid inside this slot)
- *   4. Colophon            (R9 + R10 + R7)
+ * Render order (bottom → top):
+ *   z-0  .atmos     two slow violet drifts
+ *   z-1  .stars     curated celestial atlas, 23 points
+ *   z-2  .grain     fractal-noise paper texture
+ *   z-3  .vignette  edge fade
+ *   z-4  .scanline  horizontal banding (desktop only)
+ *   z-10 .shell     content (header + slot + colophon)
  *
- * Fonts (D9 Hybrid Scenario C): Fraunces variable + Inter variable +
- * JetBrains Mono are loaded from Google Fonts during Step 1.5.
- * Self-hosting the woff2 files is a Step 6 polish task before deploy
- * (R17 compliance).
+ * Fonts (D10): Cormorant Garamond + Inter + JetBrains Mono via Google
+ * Fonts CDN. Self-hosting woff2 is a Step 6 polish task (R17).
  */
 import '@styles/global.css';
 import { SITE } from '@data/site';
 import Colophon from '@components/Colophon.astro';
+import EditionStamp from '@components/EditionStamp.astro';
 
 interface Props {
   title?: string;
   description?: string;
-  /** Set false on pages where the CC-Zero attribution doesn't apply
-   *  (Phase II waitlist, 404). */
   showAttribution?: boolean;
-  /** Page-level OG image override. Defaults to the edition OG. */
+  /** Show the edition stamp in the masthead. Defaults true; set false on
+   *  pages that are themselves about the edition (the about page, etc.) */
+  showStamp?: boolean;
+  /** Page-level OG image override. */
   ogImage?: string;
+  /** Body class hook for per-page styling. */
+  bodyClass?: string;
 }
 
 const {
   title       = SITE.title,
   description = SITE.tagline,
   showAttribution = true,
+  showStamp   = true,
   ogImage     = `${SITE.baseUrl}/og-${SITE.edition}.png`,
+  bodyClass   = '',
 } = Astro.props;
 
 const fullTitle = title === SITE.title ? title : `${title} — ${SITE.title}`;
@@ -51,7 +56,6 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph + Twitter -->
     <meta property="og:type"        content="website" />
     <meta property="og:url"         content={canonical} />
     <meta property="og:title"       content={fullTitle} />
@@ -62,11 +66,9 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image"       content={ogImage} />
 
-    <!-- Favicon: violet glyph, inline SVG (no extra request, no CDN). -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%23a78bfa' stroke-width='1.4'/><circle cx='16' cy='16' r='3' fill='%23a78bfa'/></svg>" />
 
-    <!-- Fonts: Cormorant Garamond (D10) + Inter + JetBrains Mono.
-         Self-hosted in Step 6 (R17). -->
+    <!-- Fonts: Cormorant Garamond + Inter + JetBrains Mono. Self-hosted in Step 6 (R17). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -75,10 +77,12 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     />
   </head>
 
-  <body>
-    <div class="atmos" aria-hidden="true"></div>
-    <div class="stars" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+  <body class={bodyClass}>
+    <div class="atmos"    aria-hidden="true"></div>
+    <div class="stars"    aria-hidden="true"></div>
+    <div class="grain"    aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
 
     <div class="shell">
       <header class="masthead reveal" style="--reveal-delay: 0s">
@@ -95,7 +99,16 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
             <em class="display-soft">Open Review</em>
           </span>
         </a>
-        <span class="edition meta-xs">Edition {SITE.edition}</span>
+
+        <div class="masthead-right">
+          <span class="edition-text">
+            <span class="edition-label">Annual Edition</span>
+            <span class="edition-num display-soft">{SITE.edition}</span>
+          </span>
+          {showStamp && (
+            <span class="stamp-wrap"><EditionStamp size={56} /></span>
+          )}
+        </div>
       </header>
 
       <main id="main">
@@ -113,8 +126,27 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 1.25rem clamp(1.5rem, 4vw, 3rem);
+    padding: 1.4rem clamp(1.5rem, 4vw, 3rem);
     border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+
+  /* Decorative under-rule — a thin violet hairline beneath the main rule */
+  .masthead::after {
+    content: '';
+    position: absolute;
+    left: clamp(1.5rem, 4vw, 3rem);
+    right: clamp(1.5rem, 4vw, 3rem);
+    bottom: -3px;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--rule-violet) 14%,
+      var(--rule-violet) 86%,
+      transparent 100%
+    );
+    opacity: 0.6;
   }
 
   .brand {
@@ -123,15 +155,12 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     gap: 0.85rem;
     text-decoration: none;
     color: var(--paper-fade);
-    transition: opacity 0.15s;
+    transition: opacity 0.2s;
   }
   .brand:hover { opacity: 0.85; }
 
-  /* Pyragogy logo — orange + dark navy bicolor, brand-fixed, R20 boundary
-     exception (logo is brand asset, not page palette). Sized for 56px
-     masthead; intrinsic ratio ~5.4:1. */
   .brand-logo {
-    height: 22px;
+    height: 26px;
     width: auto;
     display: block;
     flex-shrink: 0;
@@ -143,35 +172,66 @@ const canonical = `${SITE.baseUrl}${Astro.url.pathname}`;
     gap: 0.4em;
     color: var(--paper-fade);
   }
-
   .brand-tagline em {
     color: var(--violet-2);
-    font-size: 1rem;
-    letter-spacing: 0.02em;
+    font-size: 1.05rem;
+    letter-spacing: 0.005em;
   }
-
   .brand-sep {
     opacity: 0.4;
     color: var(--paper-fade);
     font-family: var(--font-mono);
   }
 
-  .edition {
+  .masthead-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .edition-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.05rem;
+    font-family: var(--font-mono);
+  }
+  .edition-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
+  }
+  .edition-num {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
     color: var(--violet-2);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .stamp-wrap {
+    display: inline-flex;
   }
 
   main {
     min-height: 60vh;
   }
 
-  @media (max-width: 600px) {
-    .brand-logo { height: 18px; }
-    .brand-tagline em { font-size: 0.9rem; }
-    .brand { gap: 0.6rem; }
+  @media (max-width: 760px) {
+    .stamp-wrap { display: none; }
+    .masthead-right { gap: 0; }
   }
 
-  @media (max-width: 420px) {
+  @media (max-width: 600px) {
+    .brand-logo { height: 22px; }
+    .brand-tagline em { font-size: 0.95rem; }
+    .brand { gap: 0.7rem; }
+    .edition-num { font-size: 1rem; }
+  }
+
+  @media (max-width: 460px) {
     .brand-tagline { display: none; }
-    .brand-logo { height: 20px; }
+    .edition-text { display: none; }
   }
 </style>

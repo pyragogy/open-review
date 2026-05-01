@@ -1,0 +1,47 @@
+---
+/**
+ * DropCap.astro — three-line ornamental initial.
+ *
+ * Cormorant italic, hairline 300, violet-3. Floated, no-select. Pair
+ * with paragraph text in a parent <p>. The component renders only the
+ * letter and a hidden visually-hidden duplicate so screen readers read
+ * the word naturally.
+ */
+
+interface Props {
+  /** The single character to set as drop-cap. */
+  letter: string;
+  /** Override font-size in em (default 4.6em — three lines tall). */
+  emSize?: number;
+  /** Override colour. Defaults to var(--violet-3). */
+  color?: string;
+}
+
+const { letter, emSize = 4.6, color = 'var(--violet-3)' } = Astro.props;
+---
+
+<span
+  class="dropcap-inline"
+  style={`font-size: ${emSize}em; color: ${color};`}
+  aria-hidden="true"
+>{letter}</span><span class="visually-hidden">{letter}</span>
+
+<style>
+  .dropcap-inline {
+    float: left;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    line-height: 0.86;
+    margin: 0.06em 0.08em 0 0;
+    user-select: none;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>

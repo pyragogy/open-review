@@ -2,68 +2,265 @@
 /**
  * index.astro — Open Review 2026 homepage.
  *
- * Composition (top → bottom):
- *
- *   1. Eyebrow                 "An interlude" — violet-3, mono caps
- *   2. Headline                Fraunces italic display, drop-cap "F",
- *                              "Peeragogy Handbook" rendered violet-3
- *   3. Asterism                ⁂ soft section break
- *   4. Standfirst              Fraunces soft italic, with em phrase
- *                              "No login. No quota. No surveillance."
- *   5. Meta-band               prose with inline mono numbers
- *   6. CTA                     "Begin reading →" with arrow translate
- *   7. Catalog strip           ten categories, 5×2 / 2×5 / 1col
- *
- * Each section reveals on load with staggered delay (R21 reduced-motion
- * compliant — see global.css .reveal).
+ * Editorial broadside layout:
+ *   1. Cover plate     headline + drop-cap, asterism, standfirst, CTAs
+ *   2. Lineage         numbered milestones from Illich (1962) onwards
+ *   3. Method          four voice cards
+ *   4. Pull-quote      centred italic between sections
+ *   5. Catalog atlas   ten categories, hand-numbered
+ *   6. Foreword teaser short prose with primary CTA
  */
 import AppShell from '@layouts/AppShell.astro';
-import Asterism from '@components/Asterism.astro';
-import CatalogStrip from '@components/CatalogStrip.astro';
+import Fleuron from '@components/Fleuron.astro';
+import EpigraphQuote from '@components/EpigraphQuote.astro';
 import { SITE } from '@data/site';
 import { CHAPTER_COUNT, CATEGORIES } from '@data/catalog';
+
+function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [val, sym] of map) {
+    while (n >= val) { out += sym; n -= val; }
+  }
+  return out;
+}
 ---
 
 <AppShell
   title={SITE.title}
   description={SITE.tagline}
+  bodyClass="page-home"
 >
   <article class="home">
-    <p class="eyebrow reveal" style="--reveal-delay: 0.2s">An interlude</p>
 
-    <h1 class="headline display reveal" style="--reveal-delay: 0.4s">
-      <span class="dropcap" aria-hidden="true">F</span><span class="visually-hidden">F</span>ifty chapters of the
-      <span class="emph">Peeragogy Handbook</span>,
-      re-read by four AI agents.
-    </h1>
+    <!-- ── 1. Cover plate ─────────────────────────────────────── -->
+    <section class="cover">
+      <p class="eyebrow reveal" style="--reveal-delay: 0.15s">An interlude</p>
 
-    <div class="reveal" style="--reveal-delay: 0.7s">
-      <Asterism margin={2.5} />
-    </div>
+      <h1 class="cover-title display letterpress reveal" style="--reveal-delay: 0.35s">
+        <span class="dropcap" aria-hidden="true">F</span><span class="visually-hidden">F</span>ifty chapters of the
+        <span class="emph">Peeragogy Handbook</span>,
+        re-read by four AI agents.
+      </h1>
 
-    <p class="standfirst display-soft reveal" style="--reveal-delay: 0.9s">
-      One static artifact. Generated once a year. Read at your own pace.
-      <span class="em">No login. No quota. No surveillance.</span>
-      The reading is the product.
-    </p>
+      <div class="reveal" style="--reveal-delay: 0.65s">
+        <Fleuron variant="diamond" margin={2.6} />
+      </div>
 
-    <p class="meta-band reveal" style="--reveal-delay: 1.1s">
-      <span class="mono-inline">{CHAPTER_COUNT}</span> chapters.
-      <span class="mono-inline">{CATEGORIES.length}</span> categories.
-      <span class="mono-inline">4</span> voices in conversation.
-      Refreshed each January.
-    </p>
+      <p class="cover-standfirst display-soft reveal" style="--reveal-delay: 0.85s">
+        One static artifact. Generated once a year. Read at your own pace.
+        <span class="em">No login. No quota. No surveillance.</span>
+        The reading is the product.
+      </p>
 
-    <p class="cta-row reveal" style="--reveal-delay: 1.1s">
-      <a class="cta" href="/handbook/">
-        Begin reading <span class="cta-arrow" aria-hidden="true">→</span>
-      </a>
-    </p>
+      <p class="cover-meta reveal" style="--reveal-delay: 1.05s">
+        <span class="mono-inline">{CHAPTER_COUNT}</span> chapters &nbsp;·&nbsp;
+        <span class="mono-inline">{CATEGORIES.length}</span> categories &nbsp;·&nbsp;
+        <span class="mono-inline">4</span> voices in conversation &nbsp;·&nbsp;
+        Refreshed each January.
+      </p>
 
-    <section class="catalog-section reveal" style="--reveal-delay: 1.4s">
-      <p class="meta-xs catalog-eyebrow">The catalog</p>
-      <CatalogStrip />
+      <p class="cta-row reveal" style="--reveal-delay: 1.25s">
+        <a class="cta cta--primary" href="/handbook/">
+          Begin reading
+          <span class="cta-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="cta cta--ghost" href="/about/">About the edition</a>
+      </p>
+
+      <span class="cover-scroll" aria-hidden="true">
+        <span class="cover-scroll-rule"></span>
+        <span class="cover-scroll-label">Continue ↓</span>
+      </span>
     </section>
+
+    <!-- ── 2. Lineage ─────────────────────────────────────────── -->
+    <section class="lineage">
+      <Fleuron variant="quatrefoil" size={26} margin={3} />
+
+      <header class="section-head">
+        <p class="eyebrow">A lineage</p>
+        <h2 class="section-title display">
+          Twelve years of practice,
+          <span class="emph">forty days of reading.</span>
+        </h2>
+      </header>
+
+      <ol class="lineage-list">
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">1962</span>
+          <p class="lineage-text">
+            Iván Illich publishes <em>Deschooling Society</em>. The seed of
+            <em>learning networks</em> that don&rsquo;t require schools.
+          </p>
+        </li>
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">2012</span>
+          <p class="lineage-text">
+            Howard Rheingold convenes a group to write the
+            <em>Peeragogy Handbook</em>. Self-organised peer learning,
+            distributed leadership, public domain. Fabrizio Terzi is among
+            the original contributors.
+          </p>
+        </li>
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">2014–2016</span>
+          <p class="lineage-text">
+            Three editions follow. Translations in Italian, Spanish,
+            Portuguese. Howard remains the public face.
+          </p>
+        </li>
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">2025</span>
+          <p class="lineage-text">
+            <em>Pyragogy</em> is formalised: peer learning evolved for the
+            AI era, where AI participates as a cognitive peer rather than a
+            tool. Thesis on <em>Cognitive Intraspecific Selection in
+            Education</em> appears on Zenodo.
+          </p>
+        </li>
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">March 2026</span>
+          <p class="lineage-text">
+            <em>Obliqo</em> ships: an AI critique tool with the same
+            four-agent method. Open Review v1 has launched; webhook
+            routing breaks during an n8n migration.
+          </p>
+        </li>
+        <li class="lineage-item">
+          <span class="lineage-year mono-inline">April 30, 2026</span>
+          <p class="lineage-text">
+            After three rounds of critique, the founder pivots to a radically
+            simpler plan: <em>Open Review as a static editorial artifact</em>.
+            <span class="em">This is what you are reading.</span>
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ── 3. Method ──────────────────────────────────────────── -->
+    <section class="method">
+      <Fleuron variant="aldine" size={28} margin={3} />
+
+      <header class="section-head">
+        <p class="eyebrow">The method</p>
+        <h2 class="section-title display">
+          Four voices,
+          <span class="emph">one revision document.</span>
+        </h2>
+      </header>
+
+      <div class="method-grid">
+        <article class="voice voice--researcher">
+          <span class="voice-num">I</span>
+          <h3 class="voice-name">Critical Researcher</h3>
+          <p class="voice-role">Evidence &amp; gaps. What does the field know?</p>
+          <p class="voice-prose">
+            Scans peer-learning trends 2024–2026. Names tensions with the
+            chapter&rsquo;s perspective. Calls out blind spots.
+          </p>
+        </article>
+        <article class="voice voice--resonance">
+          <span class="voice-num">II</span>
+          <h3 class="voice-name">Resonance Pattern</h3>
+          <p class="voice-role">What works and why. The Handbook&rsquo;s memory.</p>
+          <p class="voice-prose">
+            Holds the entire Handbook in awareness. Checks vocabulary
+            fidelity. Names what must be preserved.
+          </p>
+        </article>
+        <article class="voice voice--distortion">
+          <span class="voice-num">III</span>
+          <h3 class="voice-name">Distortion Pattern</h3>
+          <p class="voice-role">First-principles attack. The lead guitar.</p>
+          <p class="voice-prose">
+            Dismantles assumptions calibrated by perturbation intensity.
+            Productive provocation, never performance.
+          </p>
+        </article>
+        <article class="voice voice--editor">
+          <span class="voice-num">IV</span>
+          <h3 class="voice-name">Editorial Brief</h3>
+          <p class="voice-role">Synthesis. Truth, not committee report.</p>
+          <p class="voice-prose">
+            Listens to all three. Names contradictions instead of hiding
+            them. Ends with one open question only a human can answer.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <Fleuron variant="diamond" size={26} margin={3.6} />
+
+    <EpigraphQuote variant="pull">
+      The text belongs to its community.
+      <span class="em"> The reading belongs to you.</span>
+    </EpigraphQuote>
+
+    <!-- ── 4. Catalog atlas ─────────────────────────────────── -->
+    <section class="catalog">
+      <Fleuron variant="aldine" size={28} margin={3} />
+
+      <header class="section-head">
+        <p class="eyebrow">The catalog</p>
+        <h2 class="section-title display">
+          Ten categories,
+          <span class="emph">fifty chapters,</span>
+          one annual ritual.
+        </h2>
+      </header>
+
+      <nav class="catalog-grid" aria-label="Handbook categories">
+        {CATEGORIES.map((cat, i) => (
+          <a class="cat-cell" href={`/handbook/${cat.id}/`} data-cat-id={cat.id}>
+            <span class="cat-roman" aria-hidden="true">{toRoman(i + 1)}</span>
+            <span class="cat-name display-soft">{cat.label}</span>
+            <span class="cat-desc">{cat.description}</span>
+            <span class="cat-count meta-xs">
+              <span class="cat-count-num mono-inline">{cat.chapters.length}</span>
+              {cat.chapters.length === 1 ? 'chapter' : 'chapters'}
+            </span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <!-- ── 5. Foreword teaser ──────────────────────────────── -->
+    <section class="foreword-teaser">
+      <Fleuron variant="quatrefoil" size={26} margin={3} />
+
+      <header class="section-head">
+        <p class="eyebrow">Where to start</p>
+        <h2 class="section-title display">
+          Begin with the
+          <span class="emph">Foreword</span>.
+        </h2>
+      </header>
+
+      <div class="prose has-dropcap">
+        <p>
+          The <em>Peeragogy Handbook</em> was written by people teaching
+          each other how to teach each other. Twelve years on, four AI
+          voices have read it again — not to finish it, but to keep it
+          alive. What follows is one revision document per chapter: not a
+          verdict, not a committee report, but a careful naming of the
+          tensions a printed page can no longer name on its own.
+        </p>
+        <p>
+          The reading is the product. Take your time.
+        </p>
+      </div>
+
+      <p class="cta-row cta-row--single">
+        <a class="cta cta--primary" href="/handbook/intro/foreword/">
+          Read the Foreword
+          <span class="cta-arrow" aria-hidden="true">→</span>
+        </a>
+      </p>
+    </section>
+
   </article>
 </AppShell>
 
@@ -74,145 +271,319 @@ import { CHAPTER_COUNT, CATEGORIES } from '@data/catalog';
     padding: clamp(3rem, 8vh, 5.5rem) clamp(1.5rem, 5vw, 5rem);
   }
 
-  /* ── Eyebrow ──────────────────────────────────────────────────────── */
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--violet-3);
-    margin: 0 0 2rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .eyebrow::before {
-    content: '';
-    width: 28px;
-    height: 1px;
-    background: var(--violet-3);
-    display: inline-block;
+  /* ── Cover plate ───────────────────────────────────────────────── */
+  .cover {
+    padding-bottom: clamp(3rem, 6vh, 5rem);
+    position: relative;
   }
 
-  /* ── Headline ─────────────────────────────────────────────────────── */
-  .headline {
-    font-size: clamp(2.4rem, 6.4vw, 5.4rem);
-    line-height: 1.05;
+  .cover-title {
+    font-size: var(--t-5xl);
+    line-height: 1.04;
     color: var(--paper);
-    margin: 0 0 0;
+    margin: 0;
     text-wrap: balance;
     max-width: 22ch;
+    letter-spacing: -0.012em;
   }
-
-  .emph {
-    color: var(--violet-3);
-    font-style: italic;
-  }
-
-  /* ── Drop cap: three lines tall, hairline 300 (Cormorant Garamond
-   *  has no opsz/SOFT axes — the Didone-adjacent contrast is baked in
-   *  at weight 300, which renders sharp at display sizes by design). */
-  .dropcap {
+  .cover-title .emph { color: var(--violet-3); font-style: italic; }
+  .cover-title .dropcap {
     float: left;
     font-family: var(--font-display);
     font-style: italic;
-    font-weight: 300;
+    font-weight: var(--display-hairline);
     color: var(--violet-3);
     font-size: 4.8em;
     line-height: 0.86;
     margin: 0.05em 0.06em 0 0;
     user-select: none;
   }
-
   .visually-hidden {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 1px; height: 1px;
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
 
-  /* ── Standfirst ───────────────────────────────────────────────────── */
-  .standfirst {
-    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  .eyebrow { margin: 0 0 2rem; }
+
+  .cover-standfirst {
+    font-size: clamp(1.18rem, 1.9vw, 1.42rem);
     line-height: 1.55;
     color: var(--paper-mute);
     max-width: 36ch;
-    margin: 1.5rem 0 2.5rem;
+    margin: 1.5rem 0 2.4rem;
   }
+  .cover-standfirst .em { color: var(--violet-3); font-style: italic; }
 
-  .em {
-    color: var(--violet-3);
-    font-style: italic;
-  }
-
-  /* ── Meta-band ────────────────────────────────────────────────────── */
-  .meta-band {
-    font-family: var(--font-body);
+  .cover-meta {
     font-size: 0.95rem;
     line-height: 1.7;
     color: var(--paper-fade);
-    margin: 0 0 1.6rem;
-    max-width: 32em;
+    margin: 0 0 2rem;
+    max-width: 36em;
   }
 
-  /* ── CTA ──────────────────────────────────────────────────────────── */
+  /* ── CTAs ─────────────────────────────────────────────────────── */
   .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    align-items: baseline;
     margin: 0 0 4rem;
   }
+  .cta-row--single { margin-top: 2.2rem; }
 
   .cta {
     display: inline-flex;
     align-items: baseline;
     gap: 0.5rem;
-    color: var(--violet-3);
     text-decoration: none;
     font-family: var(--font-body);
     font-size: 1.05rem;
     font-weight: 500;
-    border-bottom: 1px solid var(--violet-7);
     padding-bottom: 2px;
     transition: color 0.2s, border-color 0.2s;
   }
+  .cta--primary { color: var(--violet-3); border-bottom: 1px solid var(--violet-7); }
+  .cta--primary:hover, .cta--primary:focus-visible {
+    color: var(--violet-2); border-bottom-color: var(--violet-3); outline: none;
+  }
+  .cta--ghost { color: var(--paper-mute); border-bottom: 1px solid var(--rule); }
+  .cta--ghost:hover { color: var(--paper); border-bottom-color: var(--rule-firm); }
+  .cta-arrow { display: inline-block; transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .cta:hover .cta-arrow, .cta:focus-visible .cta-arrow { transform: translateX(4px); }
 
-  .cta:hover,
-  .cta:focus-visible {
-    color: var(--violet-2);
-    border-bottom-color: var(--violet-3);
+  .cover-scroll {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--paper-deepfade);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .cover-scroll-rule { width: 36px; height: 1px; background: var(--violet-7); }
+  .cover-scroll-label { animation: scrollHint 2.6s ease-in-out infinite; }
+  @keyframes scrollHint {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50%      { opacity: 1;   transform: translateY(2px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cover-scroll-label { animation: none; opacity: 0.6; }
+  }
+
+  /* ── Section heads ───────────────────────────────────────────── */
+  .section-head { margin: 0 0 3rem; max-width: 38rem; }
+  .section-head .eyebrow { margin-bottom: 1.4rem; }
+  .section-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-regular);
+    font-size: var(--t-3xl);
+    line-height: 1.15;
+    color: var(--paper);
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.005em;
+  }
+  .section-title .emph { color: var(--violet-3); }
+
+  /* ── Lineage ─────────────────────────────────────────────────── */
+  .lineage { padding: 2rem 0 4rem; }
+
+  .lineage-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.4rem 4rem;
+  }
+  @media (max-width: 760px) {
+    .lineage-list { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .lineage-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    align-items: baseline;
+  }
+  .lineage-year {
+    font-family: var(--font-mono);
+    color: var(--violet-3);
+    font-size: 0.86rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    padding-top: 0.1rem;
+    border-bottom: 1px solid var(--rule-violet);
+    padding-bottom: 0.3rem;
+    align-self: start;
+  }
+  .lineage-text {
+    font-size: var(--t-base);
+    line-height: 1.65;
+    color: var(--paper-mute);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .lineage-text em { color: var(--paper); font-style: italic; }
+  .lineage-text .em { color: var(--violet-3); font-style: italic; }
+
+  /* ── Method ──────────────────────────────────────────────────── */
+  .method { padding: 2rem 0 4rem; }
+
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+  @media (max-width: 1023px) { .method-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; } }
+  @media (max-width: 540px)  { .method-grid { grid-template-columns: 1fr; } }
+
+  .voice {
+    padding: 1.6rem 1.4rem;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--voice-color);
+    background:
+      linear-gradient(180deg, var(--voice-bg) 0%, transparent 60%),
+      var(--ink-soft);
+    border-radius: 4px;
+    position: relative;
+  }
+  .voice--researcher { --voice-color: var(--agent-researcher); --voice-bg: var(--agent-researcher-bg); }
+  .voice--resonance  { --voice-color: var(--agent-resonance);  --voice-bg: var(--agent-resonance-bg); }
+  .voice--distortion { --voice-color: var(--agent-distortion); --voice-bg: var(--agent-distortion-bg); }
+  .voice--editor     { --voice-color: var(--agent-editor);     --voice-bg: var(--agent-editor-bg); }
+
+  .voice-num {
+    position: absolute;
+    top: 0.8rem; right: 1.1rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    font-size: 1.6rem;
+    color: var(--voice-color);
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  .voice-name {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--voice-color);
+    margin: 0 0 0.4rem;
+    font-weight: 500;
+  }
+
+  .voice-role {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--paper);
+    margin: 0 0 0.8rem;
+    line-height: 1.35;
+  }
+
+  .voice-prose {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--paper-mute);
+    margin: 0;
+  }
+
+  /* ── Catalog ──────────────────────────────────────────────────── */
+  .catalog { padding: 2rem 0 4rem; }
+
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  @media (min-width: 760px) { .catalog-grid { grid-template-columns: repeat(5, 1fr); } }
+  @media (max-width: 480px) { .catalog-grid { grid-template-columns: 1fr; } }
+
+  .cat-cell {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.6rem;
+    padding: 1.6rem 1.4rem 1.3rem;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    color: var(--paper-mute);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+  }
+  .cat-cell:hover, .cat-cell:focus-visible {
+    background: rgba(167, 139, 250, 0.05);
     outline: none;
   }
+  .cat-cell:hover .cat-name, .cat-cell:focus-visible .cat-name { color: var(--violet-2); }
 
-  .cta-arrow {
-    display: inline-block;
-    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  .cat-roman {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
   }
 
-  .cta:hover .cta-arrow,
-  .cta:focus-visible .cta-arrow {
-    transform: translateX(4px);
+  .cat-name {
+    font-size: 1.18rem;
+    color: var(--paper);
+    line-height: 1.25;
+    transition: color 0.2s;
   }
 
-  /* ── Catalog ──────────────────────────────────────────────────────── */
-  .catalog-section {
-    margin-top: clamp(3rem, 8vh, 5rem);
+  .cat-desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--paper-fade);
   }
 
-  .catalog-eyebrow {
-    margin: 0 0 1.4rem;
-    color: var(--mono-dim);
+  .cat-count {
+    color: var(--violet-3);
+    margin-top: 0.4rem;
+    font-feature-settings: 'tnum';
+    border-top: 1px solid var(--rule);
+    padding-top: 0.5rem;
+  }
+  .cat-count-num {
+    color: var(--violet-3);
+    font-weight: 500;
+    margin-right: 0.3rem;
   }
 
-  /* ── Mobile fine-tuning ───────────────────────────────────────────── */
-  @media (max-width: 480px) {
-    .dropcap {
-      font-size: 4em;
-    }
-    .headline {
-      font-size: 2.4rem;
-    }
-    .standfirst {
-      font-size: 1.05rem;
-    }
+  /* ── Foreword teaser ──────────────────────────────────────────── */
+  .foreword-teaser { padding: 2rem 0 1rem; }
+  .foreword-teaser .prose { max-width: 38rem; margin: 0; }
+  .foreword-teaser .has-dropcap > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    color: var(--violet-3);
+    font-size: 4em;
+    line-height: 0.9;
+    margin: 0.06em 0.1em 0 0;
   }
+  .foreword-teaser p {
+    font-size: var(--t-md);
+    line-height: 1.7;
+    color: var(--paper-mute);
+    margin: 0 0 1.4em;
+    text-wrap: pretty;
+  }
+  .foreword-teaser p em { color: var(--paper); font-style: italic; }
+  .foreword-teaser p .em { color: var(--violet-3); font-style: italic; }
 </style>

@@ -1,0 +1,64 @@
+---
+/**
+ * EpigraphQuote.astro — pull-quote / chapter epigraph.
+ *
+ * Centred large italic. Optional citation rendered in mono caps. Used
+ * at chapter openings, between sections, and on the about page.
+ */
+
+interface Props {
+  /** Cite source (author, work, year). Optional. */
+  cite?: string;
+  /** Variant: 'pull' (centred large) or 'hanging' (left-flush w/ mark) */
+  variant?: 'pull' | 'hanging';
+}
+
+const { cite, variant = 'pull' } = Astro.props;
+---
+
+{variant === 'pull' && (
+  <figure class="epigraph epigraph--pull">
+    <blockquote>
+      <slot />
+    </blockquote>
+    {cite && <figcaption>{cite}</figcaption>}
+  </figure>
+)}
+
+{variant === 'hanging' && (
+  <figure class="epigraph epigraph--hanging">
+    <blockquote class="hanging-quote">
+      <slot />
+      {cite && <cite>{cite}</cite>}
+    </blockquote>
+  </figure>
+)}
+
+<style>
+  .epigraph { margin: 3rem auto; max-width: 36ch; }
+  .epigraph--pull { text-align: center; }
+  .epigraph--pull blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-regular);
+    font-size: var(--t-xl);
+    line-height: 1.3;
+    color: var(--paper);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .epigraph--pull blockquote :global(.em) {
+    color: var(--violet-3);
+  }
+  .epigraph--pull figcaption {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mono-dim);
+  }
+  .epigraph--pull figcaption::before { content: '— '; }
+
+  .epigraph--hanging { max-width: 42ch; }
+</style>

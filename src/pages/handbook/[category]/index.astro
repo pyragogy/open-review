@@ -1,0 +1,238 @@
+---
+/**
+ * /handbook/[category]/ — category landing.
+ *
+ * Renders the category title, description, and a vertical list of its
+ * chapters with their icons and one-line summary lines (placeholder
+ * until the batch generates chapter summaries).
+ */
+import AppShell from '@layouts/AppShell.astro';
+import Fleuron from '@components/Fleuron.astro';
+import Marginalia from '@components/Marginalia.astro';
+import { CATEGORIES, CHAPTER_COUNT } from '@data/catalog';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((cat, i) => ({
+    params: { category: cat.id },
+    props: {
+      cat,
+      catIndex: i,
+    },
+  }));
+}
+
+const { cat, catIndex } = Astro.props;
+
+function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [val, sym] of map) {
+    while (n >= val) { out += sym; n -= val; }
+  }
+  return out;
+}
+
+const roman = toRoman(catIndex + 1);
+---
+
+<AppShell
+  title={`${cat.label} — Open Review 2026`}
+  description={cat.description}
+  bodyClass="page-category"
+>
+  <article class="category">
+
+    <nav class="breadcrumb meta-xs" aria-label="Breadcrumb">
+      <a href="/handbook/">Handbook</a>
+      <span class="bread-sep" aria-hidden="true">/</span>
+      <span class="bread-current">{cat.label}</span>
+    </nav>
+
+    <header class="cat-head">
+      <span class="cat-roman" aria-hidden="true">{roman}</span>
+      <div class="cat-text">
+        <p class="eyebrow">A category</p>
+        <h1 class="cat-title display letterpress">{cat.label}</h1>
+        <p class="cat-desc display-soft">{cat.description}</p>
+        <p class="cat-meta">
+          <span class="mono-inline">{cat.chapters.length}</span>
+          {cat.chapters.length === 1 ? 'chapter' : 'chapters'} &nbsp;·&nbsp;
+          plate <span class="mono-inline">{roman}</span> of <span class="mono-inline">X</span>
+        </p>
+      </div>
+    </header>
+
+    <Fleuron variant="diamond" margin={3} />
+
+    <ol class="chapter-list">
+      {cat.chapters.map((ch, j) => (
+        <li class="chapter-row">
+          <a href={`/handbook/${cat.id}/${ch.id}/`} class="chapter-link">
+            <span class="chap-num mono-inline">{String(j + 1).padStart(2, '0')}</span>
+            <span class="chap-icon" aria-hidden="true">{ch.icon}</span>
+            <span class="chap-title display-soft">{ch.title}</span>
+            <span class="chap-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <Fleuron variant="aldine" size={22} margin={3.6} />
+
+    <nav class="cat-nav meta-xs" aria-label="Other categories">
+      <p class="cat-nav-label">Continue browsing</p>
+      <ul class="cat-nav-list">
+        {CATEGORIES.filter((c) => c.id !== cat.id).map((c) => (
+          <li>
+            <a href={`/handbook/${c.id}/`} class="cat-nav-link">{c.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+  </article>
+</AppShell>
+
+<style>
+  .category {
+    max-width: var(--shell-maxw);
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vh, 4rem) clamp(1.5rem, 5vw, 5rem);
+  }
+
+  /* ── Breadcrumb ──────────────────────────────────────────────── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 0.7rem;
+    margin-bottom: 2.4rem;
+    color: var(--paper-deepfade);
+  }
+  .breadcrumb a {
+    color: var(--paper-fade); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .breadcrumb a:hover { color: var(--violet-2); border-bottom-color: var(--rule-violet); }
+  .bread-sep  { color: var(--paper-deepfade); }
+  .bread-current { color: var(--paper-mute); }
+
+  /* ── Head ─────────────────────────────────────────────────── */
+  .cat-head {
+    display: grid;
+    grid-template-columns: minmax(80px, 110px) 1fr;
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    align-items: start;
+    padding: 1.4rem 0 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .cat-roman {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    color: var(--violet-3);
+    letter-spacing: -0.005em;
+    text-align: right;
+  }
+  .cat-text { min-width: 0; }
+  .eyebrow { margin: 0 0 1.2rem; }
+  .cat-title {
+    font-size: var(--t-3xl);
+    line-height: 1.05;
+    color: var(--paper);
+    margin: 0 0 0.8rem;
+    text-wrap: balance;
+  }
+  .cat-desc {
+    font-size: var(--t-md);
+    line-height: 1.5;
+    color: var(--paper-mute);
+    margin: 0 0 1rem;
+    max-width: 42ch;
+  }
+  .cat-meta {
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.06em;
+    color: var(--paper-deepfade);
+    margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    .cat-head { grid-template-columns: 1fr; }
+    .cat-roman { text-align: left; }
+  }
+
+  /* ── Chapter list ──────────────────────────────────────────── */
+  .chapter-list {
+    list-style: none; margin: 0; padding: 0;
+  }
+  .chapter-row {
+    margin: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .chapter-link {
+    display: grid;
+    grid-template-columns: 3rem 2.4rem 1fr 1.5rem;
+    gap: 1.2rem;
+    align-items: baseline;
+    padding: 1.3rem 0.4rem;
+    color: var(--paper-mute);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .chapter-link:hover,
+  .chapter-link:focus-visible {
+    background: rgba(167, 139, 250, 0.04);
+    color: var(--paper);
+    outline: none;
+  }
+  .chapter-link:hover .chap-title,
+  .chapter-link:focus-visible .chap-title {
+    color: var(--violet-2);
+  }
+  .chapter-link:hover .chap-arrow,
+  .chapter-link:focus-visible .chap-arrow {
+    transform: translateX(4px);
+    color: var(--violet-3);
+  }
+
+  .chap-num { color: var(--paper-deepfade); font-size: 0.86rem; }
+  .chap-icon { font-size: 1.2rem; line-height: 1; }
+  .chap-title {
+    font-size: var(--t-md);
+    color: var(--paper);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+  .chap-arrow {
+    color: var(--paper-deepfade);
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s;
+    text-align: right;
+  }
+
+  /* ── Cat nav ────────────────────────────────────────────────── */
+  .cat-nav {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .cat-nav-label { color: var(--paper-deepfade); margin: 0 0 1rem; }
+  .cat-nav-list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem;
+  }
+  .cat-nav-link {
+    color: var(--paper-mute); text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    padding-bottom: 0.2rem;
+  }
+  .cat-nav-link:hover { color: var(--violet-2); border-bottom-color: var(--rule-violet); }
+</style>

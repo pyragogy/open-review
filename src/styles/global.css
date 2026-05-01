@@ -1,16 +1,20 @@
 /**
  * global.css — Open Review 2026 base styles
  *
- * Order matters:
- *   1. tokens.css        — CSS custom properties (palette, fonts, layout)
- *   2. Tailwind base     — reset + Tailwind defaults
- *   3. typography.css    — @font-face + html/body baseline
- *   4. Tailwind components/utilities — application surface
+ * Atmosphere stratification, editorial broadside utilities, ornament
+ * primitives. Reading the file top-to-bottom mirrors paint order:
  *
- * The atmosphere layer (two radial drifts + faint star-grain + paper
- * grain) is rendered as fixed-position pseudo-elements so the editorial
- * mood follows the reader through scrolling chapter pages without
- * polluting individual layouts.
+ *   1. tokens.css           — design tokens (palette, fonts, layout)
+ *   2. Tailwind base        — reset + Tailwind defaults
+ *   3. typography.css       — @font-face + html/body baseline
+ *   4. atmosphere stack     — drifts, stars, grain, vignette
+ *   5. reveal stagger       — staggered intro
+ *   6. ornament utilities   — fleurons, asterisms, hanging quotes,
+ *                             pull-quotes, ornamental rules
+ *   7. layout helpers       — folio, marginalia, prose containers
+ *
+ * R21 reduced-motion compliance: every animated rule has a corresponding
+ * killswitch in the matching @media block at the bottom of the file.
  */
 
 @import './tokens.css';
@@ -20,12 +24,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Reset polish ─────────────────────────────────────────────────────
-   Tailwind base resets a lot, but we want a few editorial overrides. */
+/* ── Reset polish ──────────────────────────────────────────────────── */
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -34,10 +35,19 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ── Atmosphere layer (port of maintenance page) ──────────────────────
-   Two violet radial drifts + faint star-grain + SVG noise overlay. The
-   layer is purely decorative (aria-hidden in markup) and respects
-   prefers-reduced-motion (R21). */
+img, svg { max-width: 100%; height: auto; }
+
+/* ── Atmosphere layer ──────────────────────────────────────────────────
+   Five fixed pseudo-elements, painted in this order:
+     z-0 .atmos    — two slow violet drifts (closest-side gradients)
+     z-1 .stars    — twenty-three star points placed as if from a
+                      celestial atlas (Cassiopeia, Big Dipper, the
+                      Bootes triangle — recognisable to the careful
+                      reader, indifferent to the casual one)
+     z-2 .grain    — SVG fractal noise, 4% opacity, mix-blend overlay
+     z-3 .vignette — radial darkening at edges (corner shadow)
+     z-4 .scanline — subtle horizontal banding (1px steps), 2% opacity
+*/
 
 .atmos {
   position: fixed;
@@ -82,22 +92,52 @@ html, body {
   100% { transform: translate3d(3vw, -2vh, 0) scale(1.06); }
 }
 
-/* Faint star-grain. Six static specks in violet-paper tones — the
-   maintenance page used a CSS animation; we keep it static here so a
-   chapter page doesn't compete with the reading experience. */
-
+/* Star map — 23 points placed by hand, not random.
+   Curated constellation hints: top-left Big Dipper (7 stars), top-right
+   Cassiopeia W (5), centre-bottom Bootes triangle (3), scattered binary
+   pairs (8). Sizes vary 1px / 1.4px / 2px to suggest magnitude. */
 .stars {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background-image:
-    radial-gradient(1px 1px at 12% 22%, rgba(236, 230, 245, 0.55), transparent 60%),
-    radial-gradient(1px 1px at 78% 14%, rgba(216, 180, 254, 0.50), transparent 60%),
-    radial-gradient(1px 1px at 34% 78%, rgba(236, 230, 245, 0.40), transparent 60%),
-    radial-gradient(1px 1px at 88% 64%, rgba(167, 139, 250, 0.60), transparent 60%),
-    radial-gradient(1px 1px at 56% 38%, rgba(236, 230, 245, 0.30), transparent 60%),
-    radial-gradient(1px 1px at 22% 56%, rgba(216, 180, 254, 0.35), transparent 60%);
+    /* Big Dipper, top-left quadrant */
+    radial-gradient(1.4px 1.4px at  6%  8%, rgba(236, 230, 245, 0.85), transparent 60%),
+    radial-gradient(1px   1px   at 11% 11%, rgba(236, 230, 245, 0.65), transparent 60%),
+    radial-gradient(1px   1px   at 16% 14%, rgba(216, 180, 254, 0.60), transparent 60%),
+    radial-gradient(1.4px 1.4px at 22% 12%, rgba(236, 230, 245, 0.80), transparent 60%),
+    radial-gradient(1px   1px   at 25%  8%, rgba(167, 139, 250, 0.50), transparent 60%),
+    radial-gradient(1px   1px   at 28%  4%, rgba(236, 230, 245, 0.55), transparent 60%),
+    radial-gradient(1.4px 1.4px at 33%  9%, rgba(236, 230, 245, 0.70), transparent 60%),
+
+    /* Cassiopeia W, top-right quadrant */
+    radial-gradient(1px   1px   at 65% 12%, rgba(216, 180, 254, 0.55), transparent 60%),
+    radial-gradient(1.4px 1.4px at 72%  8%, rgba(236, 230, 245, 0.80), transparent 60%),
+    radial-gradient(1px   1px   at 79% 13%, rgba(236, 230, 245, 0.60), transparent 60%),
+    radial-gradient(1.4px 1.4px at 86%  9%, rgba(167, 139, 250, 0.65), transparent 60%),
+    radial-gradient(1px   1px   at 93% 14%, rgba(236, 230, 245, 0.55), transparent 60%),
+
+    /* Bootes triangle, centre-bottom */
+    radial-gradient(1.4px 1.4px at 41% 64%, rgba(216, 180, 254, 0.70), transparent 60%),
+    radial-gradient(1px   1px   at 48% 71%, rgba(236, 230, 245, 0.55), transparent 60%),
+    radial-gradient(1.4px 1.4px at 55% 65%, rgba(167, 139, 250, 0.60), transparent 60%),
+
+    /* Scattered binary pairs and field stars */
+    radial-gradient(1px   1px   at 18% 42%, rgba(236, 230, 245, 0.45), transparent 60%),
+    radial-gradient(1px   1px   at 21% 47%, rgba(216, 180, 254, 0.40), transparent 60%),
+    radial-gradient(2px   2px   at 60% 36%, rgba(236, 230, 245, 0.85), transparent 60%),
+    radial-gradient(1px   1px   at 63% 41%, rgba(167, 139, 250, 0.45), transparent 60%),
+    radial-gradient(1px   1px   at 84% 52%, rgba(236, 230, 245, 0.40), transparent 60%),
+    radial-gradient(1.4px 1.4px at 12% 78%, rgba(216, 180, 254, 0.55), transparent 60%),
+    radial-gradient(1px   1px   at  8% 82%, rgba(236, 230, 245, 0.45), transparent 60%),
+    radial-gradient(1.4px 1.4px at 89% 84%, rgba(167, 139, 250, 0.60), transparent 60%);
+  animation: starfield-twinkle 9s ease-in-out infinite;
+}
+
+@keyframes starfield-twinkle {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1.00; }
 }
 
 /* SVG fractal noise — paper texture, low opacity, mix-blend overlay. */
@@ -111,10 +151,47 @@ html, body {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-/* ── Reveal stagger ───────────────────────────────────────────────────
-   Used on home + chapter pages. Each .reveal child fades in with a
-   delay set by --reveal-delay. Reduced motion bypasses the animation
-   entirely (R21). */
+/* Vignette — pulls focus to the centre on every page. */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(13, 10, 24, 0.45) 100%
+  );
+}
+
+/* Subtle scanline grid — letterpress paper feel. 0.02 opacity, 1px
+   spacing at 96 dpi. Killed under reduced motion (and on mobile). */
+.scanline {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(236, 230, 245, 0.6) 0px,
+    rgba(236, 230, 245, 0.6) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+@media (max-width: 720px) {
+  .scanline { display: none; }
+}
+
+/* Content above all atmosphere layers. */
+.shell {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Reveal stagger ─────────────────────────────────────────────────── */
 
 .reveal {
   opacity: 0;
@@ -124,11 +201,247 @@ html, body {
 }
 
 @keyframes reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Ornament utilities ─────────────────────────────────────────────── */
+
+/* Short editorial rule. Used as eyebrow-prefix and section opener. */
+.rule-short {
+  display: inline-block;
+  width: var(--ornament-rule-w);
+  height: 1px;
+  background: var(--violet-3);
+  vertical-align: middle;
+}
+
+/* Centred ornamental rule with a fleuron in the middle. The fleuron
+   itself is provided by Fleuron.astro; this class only scaffolds the
+   geometry of the line + breakpoint. */
+.rule-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: 2.5rem 0;
+  color: var(--violet-2);
+}
+.rule-centered::before,
+.rule-centered::after {
+  content: '';
+  flex: 1 1 0;
+  max-width: 8rem;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--rule-violet) 50%,
+    transparent 100%
+  );
+}
+.rule-centered::before { background: linear-gradient(to right, transparent 0%, var(--rule-violet) 100%); }
+.rule-centered::after  { background: linear-gradient(to left,  transparent 0%, var(--rule-violet) 100%); }
+
+/* Hanging quote — pulls open quote outside the prose column.
+   Use on <blockquote class="hanging-quote">. */
+.hanging-quote {
+  position: relative;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-regular);
+  font-size: var(--t-md);
+  line-height: 1.55;
+  color: var(--paper-mute);
+  margin: 2rem 0;
+  padding-left: 2.4rem;
+  padding-right: 1rem;
+  border-left: 1px solid var(--rule-violet);
+}
+
+.hanging-quote::before {
+  content: '\201C';
+  position: absolute;
+  left: 0.4rem;
+  top: -0.4rem;
+  font-size: 3.6rem;
+  line-height: 1;
+  color: var(--violet-3);
+  font-style: italic;
+  opacity: 0.55;
+}
+
+.hanging-quote cite {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: var(--t-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mono-dim);
+}
+.hanging-quote cite::before { content: '— '; }
+
+/* Pull-quote — large, centred, no marks, used between sections. */
+.pull-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-regular);
+  font-size: var(--t-xl);
+  line-height: 1.35;
+  text-align: center;
+  color: var(--paper);
+  max-width: 32ch;
+  margin: 3rem auto;
+  letter-spacing: -0.005em;
+}
+
+.pull-quote .em {
+  color: var(--violet-3);
+  font-style: italic;
+}
+
+/* Eyebrow — short uppercased mono caps with leading rule. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--violet-3);
+}
+.eyebrow::before {
+  content: '';
+  width: var(--ornament-rule-w);
+  height: 1px;
+  background: var(--violet-3);
+}
+
+/* Edition stamp — small wax-seal-style mark, sits in the masthead /
+   page corners. Renders as a circular badge with a fleuron-feeling
+   centre dot and a violet rule. */
+.stamp {
+  width: var(--stamp-size);
+  height: var(--stamp-size);
+  border: 1px solid var(--violet-3);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--stamp-bg);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--violet-2);
+  text-align: center;
+  line-height: 1.2;
+  position: relative;
+}
+.stamp .stamp-year {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.45rem;
+  letter-spacing: 0.02em;
+  font-weight: var(--display-regular);
+  color: var(--violet-3);
+  text-transform: none;
+  line-height: 1;
+  margin-bottom: 0.05em;
+}
+.stamp .stamp-cap {
+  display: block;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+}
+
+/* Letterpress emboss for display text — double-stroke text-shadow
+   creates a soft printed feel without being kitschy. */
+.letterpress {
+  text-shadow:
+    0 1px 0 rgba(13, 10, 24, 0.6),
+    0 0 24px rgba(167, 139, 250, 0.10);
+}
+
+/* Marginalia — right-aligned small mono register, used as folio /
+   chapter index on chapter pages. */
+.marginalia {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-deepfade);
+  line-height: 1.6;
+}
+.marginalia .marg-num {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-regular);
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  color: var(--violet-3);
+  text-transform: none;
+  margin-bottom: 0.2em;
+}
+
+/* Folio — running footer with edition + page label. */
+.folio {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 0 0.6rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-deepfade);
+}
+.folio .folio-c {
+  font-family: var(--font-display);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.92rem;
+  color: var(--paper-fade);
+}
+
+/* Prose container — used on about/chapter pages to enforce optimal
+   measure (38rem ≈ 75 ch at body text size). */
+.prose {
+  max-width: var(--prose-maxw);
+  margin: 0 auto;
+}
+.prose p {
+  margin: 0 0 1.4em;
+  font-size: var(--t-md);
+  line-height: 1.7;
+  color: var(--paper-mute);
+  hyphens: auto;
+  text-wrap: pretty;
+}
+.prose p .em {
+  color: var(--violet-3);
+  font-style: italic;
+}
+.prose h2 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-regular);
+  font-size: var(--t-xl);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--paper);
+  margin: 3rem 0 1rem;
+}
+
+/* ── Reduced motion compliance (R21) ─────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {
@@ -136,23 +449,15 @@ html, body {
     transform: none;
     animation: none;
   }
-}
-
-/* R21: respect prefers-reduced-motion. */
-@media (prefers-reduced-motion: reduce) {
   .atmos::before,
-  .atmos::after {
+  .atmos::after,
+  .stars {
     animation: none;
   }
 }
 
-/* Content sits above the atmosphere. */
-.shell {
-  position: relative;
-  z-index: 5;
-}
+/* ── Focus ─────────────────────────────────────────────────────────── */
 
-/* Focus outline — keyboard accessibility. */
 :focus-visible {
   outline: 2px solid var(--violet-3);
   outline-offset: 2px;

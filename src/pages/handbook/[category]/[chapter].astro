@@ -1,0 +1,618 @@
+---
+/**
+ * /handbook/[category]/[chapter]/ — chapter page (Step 4-5 preview).
+ *
+ * Three-pane editorial review layout:
+ *
+ *   ┌────────────────────────────────────────────────────────────┐
+ *   │ Breadcrumb + chapter head                                  │
+ *   ├────────────────┬───────────────────────────┬───────────────┤
+ *   │ TOC sidebar    │ Chapter document          │ Review panel  │
+ *   │ (other cat     │ (markdown rendering of    │ (score, open  │
+ *   │  chapters)     │  the source .md)          │  question, 4  │
+ *   │                │                           │  voice cards) │
+ *   └────────────────┴───────────────────────────┴───────────────┘
+ *
+ * Until the batch generates real reviews (Step 2-3), the page renders
+ * a placeholder review document inline so the visual structure can be
+ * approved before any OpenRouter spend. The placeholder is clearly
+ * marked "Preview — pending generation".
+ *
+ * R8 + R11: every line of placeholder text is editorial, never an
+ * invented quote attributed to Howard Rheingold or any contributor.
+ */
+import AppShell from '@layouts/AppShell.astro';
+import Fleuron from '@components/Fleuron.astro';
+import Marginalia from '@components/Marginalia.astro';
+import EpigraphQuote from '@components/EpigraphQuote.astro';
+import { CATEGORIES, chapterSourceUrl } from '@data/catalog';
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { category: string; chapter: string }; props: any }> = [];
+  CATEGORIES.forEach((cat, ci) => {
+    cat.chapters.forEach((ch, chi) => {
+      paths.push({
+        params: { category: cat.id, chapter: ch.id },
+        props: {
+          cat, ch,
+          catIndex: ci,
+          chIndex: chi,
+        },
+      });
+    });
+  });
+  return paths;
+}
+
+const { cat, ch, catIndex, chIndex } = Astro.props;
+
+const sourceUrl = chapterSourceUrl(ch);
+
+function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [val, sym] of map) {
+    while (n >= val) { out += sym; n -= val; }
+  }
+  return out;
+}
+
+const catRoman = toRoman(catIndex + 1);
+const chapNum = String(chIndex + 1).padStart(2, '0');
+
+// Adjacent chapters within the same category for next/prev nav.
+const prevCh = chIndex > 0 ? cat.chapters[chIndex - 1] : null;
+const nextCh = chIndex < cat.chapters.length - 1 ? cat.chapters[chIndex + 1] : null;
+---
+
+<AppShell
+  title={`${ch.title} — Open Review 2026`}
+  description={`A four-agent AI review of "${ch.title}" from the Peeragogy Handbook (${cat.label}).`}
+  bodyClass="page-chapter"
+>
+  <article class="chapter">
+
+    <!-- ── Breadcrumb + head ─────────────────────────────────── -->
+    <nav class="breadcrumb meta-xs" aria-label="Breadcrumb">
+      <a href="/handbook/">Handbook</a>
+      <span class="bread-sep" aria-hidden="true">/</span>
+      <a href={`/handbook/${cat.id}/`}>{cat.label}</a>
+      <span class="bread-sep" aria-hidden="true">/</span>
+      <span class="bread-current">{ch.title}</span>
+    </nav>
+
+    <header class="chapter-head">
+      <div class="ch-top">
+        <span class="ch-cat-mark meta-xs">
+          Plate <span class="mono-inline">{catRoman}</span> &nbsp;·&nbsp;
+          <a href={`/handbook/${cat.id}/`}>{cat.label}</a>
+        </span>
+        <span class="ch-num">{ch.icon} <span class="mono-inline">{chapNum}</span></span>
+      </div>
+      <h1 class="chapter-title display letterpress">{ch.title}</h1>
+      <p class="chapter-stand display-soft">
+        A four-agent revision document, generated <span class="mono-inline">2026-04-30</span>.
+        <span class="em">The text belongs to its community.</span>
+      </p>
+    </header>
+
+    <Fleuron variant="diamond" margin={2.4} />
+
+    <!-- ── Three-pane body ──────────────────────────────────── -->
+    <div class="ch-body">
+
+      <!-- ─ TOC sidebar ─ -->
+      <aside class="ch-sidebar" aria-label="Other chapters in this category">
+        <p class="ch-sidebar-label meta-xs">{cat.label}</p>
+        <ol class="ch-sidebar-list">
+          {cat.chapters.map((c, j) => (
+            <li>
+              <a
+                href={`/handbook/${cat.id}/${c.id}/`}
+                class={`ch-sidebar-link ${c.id === ch.id ? 'is-current' : ''}`}
+              >
+                <span class="ch-sb-num mono-inline">{String(j + 1).padStart(2, '0')}</span>
+                <span class="ch-sb-title">{c.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+
+      <!-- ─ Document column ─ -->
+      <main class="ch-doc">
+
+        <p class="placeholder-banner meta-xs">
+          Preview — chapter source &amp; review generation pending
+        </p>
+
+        <EpigraphQuote variant="hanging" cite="Howard Rheingold et al., 2012, CC0-1.0">
+          The Peeragogy Handbook was written by people teaching each
+          other how to teach each other.
+        </EpigraphQuote>
+
+        <div class="prose has-dropcap">
+          <p>
+            This is a placeholder for the source text of <em>{ch.title}</em>.
+            Once the Step-2 batch runs, the chapter&rsquo;s Markdown is
+            fetched at build time from the canonical
+            <em>pyragogy/legacy-peeragogy-handbook</em> fork and rendered
+            here in full, with footnotes and inline references preserved.
+          </p>
+          <p>
+            For now: the layout has been verified, the typography is set,
+            and the editorial register is in place. <span class="em">No
+            attributions have been invented.</span> The four-agent review
+            in the right column is also a placeholder, clearly marked.
+          </p>
+
+          <h2 class="ch-section">A note on the source</h2>
+          <p>
+            The fork at <code>pyragogy/legacy-peeragogy-handbook</code>
+            preserves a known typo upstream (<code>foreward.md</code>)
+            because URL stability matters more to a generator than
+            spelling does. The fix belongs in the fork, not in this
+            artifact (R6).
+          </p>
+        </div>
+
+        <Fleuron variant="aldine" size={22} margin={2.4} />
+
+        <nav class="ch-nav meta-xs" aria-label="Adjacent chapters">
+          <span class="ch-nav-prev">
+            {prevCh ? (
+              <a href={`/handbook/${cat.id}/${prevCh.id}/`}>
+                ← {prevCh.title}
+              </a>
+            ) : (
+              <a href={`/handbook/${cat.id}/`}>← Category</a>
+            )}
+          </span>
+          <span class="ch-nav-next">
+            {nextCh ? (
+              <a href={`/handbook/${cat.id}/${nextCh.id}/`}>
+                {nextCh.title} →
+              </a>
+            ) : (
+              <a href="/handbook/">All categories →</a>
+            )}
+          </span>
+        </nav>
+
+      </main>
+
+      <!-- ─ Review panel ─ -->
+      <aside class="ch-review" aria-label="Four-agent review">
+
+        <div class="review-score">
+          <p class="meta-xs review-score-label">Revision score</p>
+          <p class="review-score-value display">
+            <span class="emph">Pending</span>
+          </p>
+          <p class="review-score-desc">
+            Rendered after Step 2-3 batch. Will display urgent / important /
+            nice-to-have with the workflow rationale.
+          </p>
+        </div>
+
+        <div class="review-question">
+          <p class="meta-xs review-question-label">Open question</p>
+          <p class="review-question-text">
+            <span class="oq-mark" aria-hidden="true">¶</span>
+            Once generated, the Editor&rsquo;s closing question for the human
+            reviewer of <em>{ch.title}</em> will appear here.
+          </p>
+        </div>
+
+        <Fleuron variant="quatrefoil" size={18} margin={1.6} />
+
+        <p class="meta-xs review-voices-label">Agent voices</p>
+
+        <details class="voice-card voice--researcher" open>
+          <summary>
+            <span class="vc-num">I</span>
+            <span class="vc-name">Critical Researcher</span>
+            <span class="vc-status">Pending</span>
+          </summary>
+          <p class="vc-prose">Field trends, tensions with the chapter, blind spots — generated by the Step 2 batch.</p>
+        </details>
+
+        <details class="voice-card voice--resonance">
+          <summary>
+            <span class="vc-num">II</span>
+            <span class="vc-name">Resonance Pattern</span>
+            <span class="vc-status">Pending</span>
+          </summary>
+          <p class="vc-prose">Internal coherence, cross-references, vocabulary fidelity, what must be preserved.</p>
+        </details>
+
+        <details class="voice-card voice--distortion">
+          <summary>
+            <span class="vc-num">III</span>
+            <span class="vc-name">Distortion Pattern</span>
+            <span class="vc-status">Pending</span>
+          </summary>
+          <p class="vc-prose">First-principles attack, calibrated by perturbation intensity (default 3 / 5).</p>
+        </details>
+
+        <details class="voice-card voice--editor">
+          <summary>
+            <span class="vc-num">IV</span>
+            <span class="vc-name">Editorial Brief</span>
+            <span class="vc-status">Pending</span>
+          </summary>
+          <p class="vc-prose">Synthesis of the three voices. Names contradictions instead of hiding them. Closes with the Open Question.</p>
+        </details>
+
+        <p class="review-source meta-xs">
+          Source: <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+            <code>{ch.filename}</code>
+          </a>
+        </p>
+
+      </aside>
+
+    </div>
+
+    <!-- ── Folio ──────────────────────────────────────────────── -->
+    <div class="folio">
+      <span class="folio-l">Edition <span class="mono-inline">2026</span> · Plate <span class="mono-inline">{catRoman}</span></span>
+      <span class="folio-c">{ch.title}</span>
+      <span class="folio-r">Chapter <span class="mono-inline">{chapNum}</span> of <span class="mono-inline">{String(cat.chapters.length).padStart(2, '0')}</span></span>
+    </div>
+
+  </article>
+</AppShell>
+
+<style>
+  .chapter {
+    max-width: var(--shell-maxw);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vh, 3.6rem) clamp(1.2rem, 4vw, 3rem);
+  }
+
+  /* ── Breadcrumb ─────────────────────────────────────────────── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 0.7rem;
+    margin-bottom: 1.6rem;
+    color: var(--paper-deepfade);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a {
+    color: var(--paper-fade); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .breadcrumb a:hover { color: var(--violet-2); border-bottom-color: var(--rule-violet); }
+  .bread-current { color: var(--paper-mute); }
+
+  /* ── Head ───────────────────────────────────────────────────── */
+  .chapter-head {
+    margin: 0 0 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ch-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.4rem;
+    color: var(--paper-fade);
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .ch-cat-mark a { color: var(--violet-3); text-decoration: none; border-bottom: 1px solid var(--rule-violet); }
+  .ch-num {
+    font-family: var(--font-mono);
+    font-size: var(--t-sm);
+    letter-spacing: 0.12em;
+    color: var(--paper-fade);
+  }
+
+  .chapter-title {
+    font-size: var(--t-4xl);
+    line-height: 1.05;
+    color: var(--paper);
+    margin: 0 0 1.2rem;
+    text-wrap: balance;
+    letter-spacing: -0.012em;
+  }
+
+  .chapter-stand {
+    font-size: var(--t-md);
+    line-height: 1.55;
+    color: var(--paper-mute);
+    margin: 0;
+    max-width: 48ch;
+  }
+  .chapter-stand .em { color: var(--violet-3); font-style: italic; }
+
+  /* ── Three-pane body ──────────────────────────────────────── */
+  .ch-body {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 320px;
+    gap: clamp(1.6rem, 3vw, 3rem);
+    align-items: start;
+    margin-top: 2rem;
+  }
+  @media (max-width: 1180px) {
+    .ch-body { grid-template-columns: 200px minmax(0, 1fr); }
+    .ch-review { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .ch-body { grid-template-columns: 1fr; }
+    .ch-sidebar { order: 3; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  }
+
+  /* ── Sidebar ──────────────────────────────────────────────── */
+  .ch-sidebar {
+    position: sticky;
+    top: 1.4rem;
+    align-self: start;
+  }
+  .ch-sidebar-label {
+    color: var(--violet-3);
+    margin-bottom: 1rem;
+  }
+  .ch-sidebar-list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 0.05rem;
+  }
+  .ch-sidebar-link {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.6rem;
+    align-items: baseline;
+    padding: 0.5rem 0.4rem;
+    color: var(--paper-fade);
+    text-decoration: none;
+    border-left: 1px solid transparent;
+    padding-left: 0.6rem;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .ch-sidebar-link:hover {
+    color: var(--paper); border-left-color: var(--rule-violet);
+  }
+  .ch-sidebar-link.is-current {
+    color: var(--violet-2);
+    border-left-color: var(--violet-3);
+    background: rgba(167, 139, 250, 0.04);
+  }
+  .ch-sb-num { color: var(--paper-deepfade); font-size: 0.74rem; }
+  .ch-sb-title { font-size: 0.92rem; line-height: 1.35; }
+
+  /* ── Document ─────────────────────────────────────────────── */
+  .ch-doc { min-width: 0; }
+
+  .placeholder-banner {
+    display: inline-block;
+    color: var(--score-important);
+    background: var(--score-important-bg);
+    border: 1px solid var(--rule-violet);
+    border-radius: 2px;
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.12em;
+  }
+
+  .has-dropcap > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    color: var(--violet-3);
+    font-size: 4em;
+    line-height: 0.86;
+    margin: 0.06em 0.1em 0 0;
+  }
+
+  .ch-doc .prose p {
+    font-size: var(--t-md);
+    line-height: 1.7;
+    color: var(--paper-mute);
+    margin: 0 0 1.4em;
+    text-wrap: pretty;
+  }
+  .ch-doc .prose p em { color: var(--paper); font-style: italic; }
+  .ch-doc .prose p .em { color: var(--violet-3); font-style: italic; }
+  .ch-doc .prose p code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    color: var(--violet-2);
+    background: rgba(167, 139, 250, 0.08);
+    padding: 0.05rem 0.3rem;
+    border-radius: 2px;
+  }
+
+  .ch-section {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-regular);
+    font-size: var(--t-xl);
+    line-height: 1.2;
+    color: var(--paper);
+    margin: 2.8rem 0 1rem;
+  }
+
+  /* ── Adjacent nav ─────────────────────────────────────────── */
+  .ch-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--rule);
+    color: var(--paper-deepfade);
+  }
+  .ch-nav a {
+    color: var(--paper-fade);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .ch-nav a:hover { color: var(--violet-2); border-bottom-color: var(--rule-violet); }
+
+  /* ── Review panel ────────────────────────────────────────── */
+  .ch-review {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.4rem 1.4rem 1.6rem;
+    background: linear-gradient(180deg, rgba(167, 139, 250, 0.04) 0%, transparent 60%), var(--ink-soft);
+    position: sticky;
+    top: 1.4rem;
+    align-self: start;
+  }
+
+  .review-score {
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .review-score-label,
+  .review-question-label,
+  .review-voices-label {
+    color: var(--paper-deepfade);
+    margin: 0 0 0.6rem;
+  }
+  .review-score-value {
+    font-size: var(--t-2xl);
+    line-height: 1.05;
+    color: var(--paper);
+    margin: 0 0 0.6rem;
+  }
+  .review-score-value .emph { color: var(--violet-3); }
+  .review-score-desc {
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--paper-fade);
+    margin: 0;
+  }
+
+  .review-question {
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .review-question-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.08rem;
+    line-height: 1.4;
+    color: var(--paper-mute);
+    margin: 0;
+    padding-left: 1.4rem;
+    position: relative;
+  }
+  .oq-mark {
+    position: absolute;
+    left: 0;
+    top: -0.1rem;
+    color: var(--violet-3);
+    opacity: 0.65;
+    font-size: 1.4rem;
+    line-height: 1;
+    font-style: normal;
+    font-family: var(--font-display);
+  }
+
+  .review-voices-label { margin-top: 1.4rem; margin-bottom: 0.8rem; }
+
+  .voice-card {
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--vc-color);
+    border-radius: 2px;
+    padding: 0.7rem 0.9rem;
+    margin: 0 0 0.5rem;
+    background: rgba(13, 10, 24, 0.6);
+  }
+  .voice-card.voice--researcher { --vc-color: var(--agent-researcher); }
+  .voice-card.voice--resonance  { --vc-color: var(--agent-resonance); }
+  .voice-card.voice--distortion { --vc-color: var(--agent-distortion); }
+  .voice-card.voice--editor     { --vc-color: var(--agent-editor); }
+
+  .voice-card summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1.4rem 1fr auto;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .voice-card summary::-webkit-details-marker { display: none; }
+
+  .vc-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    color: var(--vc-color);
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+  .vc-name {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--vc-color);
+    line-height: 1.3;
+  }
+  .vc-status {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
+  }
+
+  .vc-prose {
+    margin: 0.6rem 0 0;
+    padding-left: 2rem;
+    font-size: 0.84rem;
+    line-height: 1.55;
+    color: var(--paper-fade);
+  }
+
+  .review-source {
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    color: var(--paper-deepfade);
+    word-break: break-all;
+  }
+  .review-source a {
+    color: var(--paper-fade);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .review-source a:hover { color: var(--violet-2); border-bottom-color: var(--rule-violet); }
+  .review-source code { font-size: 0.78rem; }
+
+  /* ── Folio ─────────────────────────────────────────────── */
+  .folio {
+    margin-top: 4rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
+  }
+  .folio-c {
+    font-family: var(--font-display);
+    font-style: italic;
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.95rem;
+    color: var(--paper-fade);
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    .folio { flex-direction: column; gap: 0.4rem; text-align: center; }
+    .folio-c { order: -1; font-size: 1.05rem; color: var(--paper-mute); }
+  }
+</style>
