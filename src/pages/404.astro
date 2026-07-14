@@ -1,0 +1,105 @@
+---
+/**
+ * 404.astro — page-not-found, typographic-only.
+ *
+ * No images, no decorative SVG. Just a large italic 404, an honest
+ * sentence, and a link back to the catalog. The atmosphere layer (from
+ * AppShell) does the visual work.
+ */
+import AppShell from '@layouts/AppShell.astro';
+import Fleuron from '@components/Fleuron.astro';
+---
+
+<AppShell
+  title="404 — Open Review 2026"
+  description="The page you were looking for does not exist."
+  bodyClass="page-404"
+  showAttribution={false}
+  showStamp={false}
+>
+  <article class="notfound">
+
+    <span class="big-num display letterpress">404</span>
+
+    <h1 class="nf-title display">
+      The page you were looking for
+      <span class="emph">does not exist</span>.
+    </h1>
+
+    <p class="nf-stand display-soft">
+      Either the URL is wrong, or the chapter has not yet been generated
+      in this edition. The catalog has fifty entries — the one you
+      wanted is almost certainly there.
+    </p>
+
+    <Fleuron variant="diamond" margin={2.8} />
+
+    <p class="cta-row">
+      <a class="cta cta--primary" href="/handbook/">
+        Return to the catalog
+        <span class="cta-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="cta cta--ghost" href="/">Go home</a>
+    </p>
+
+  </article>
+</AppShell>
+
+<style>
+  .notfound {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 12vh, 8rem) clamp(1.5rem, 5vw, 5rem);
+    text-align: center;
+  }
+
+  .big-num {
+    display: block;
+    font-size: clamp(8rem, 18vw, 14rem);
+    line-height: 1;
+    color: var(--violet-3);
+    margin: 0 0 1.6rem;
+    letter-spacing: -0.04em;
+    font-weight: var(--display-hairline);
+  }
+
+  .nf-title {
+    font-size: var(--t-2xl);
+    line-height: 1.2;
+    color: var(--paper);
+    margin: 0 0 1rem;
+    text-wrap: balance;
+    letter-spacing: -0.005em;
+  }
+  .nf-title .emph { color: var(--violet-3); }
+
+  .nf-stand {
+    font-size: var(--t-md);
+    line-height: 1.55;
+    color: var(--paper-mute);
+    max-width: 38ch;
+    margin: 0 auto 2rem;
+  }
+
+  .cta-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 1rem;
+  }
+  .cta {
+    display: inline-flex; align-items: baseline; gap: 0.5rem;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 1.05rem; font-weight: 500;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .cta--primary { color: var(--violet-3); border-bottom: 1px solid var(--violet-7); }
+  .cta--primary:hover { color: var(--violet-2); border-bottom-color: var(--violet-3); }
+  .cta--ghost { color: var(--paper-mute); border-bottom: 1px solid var(--rule); }
+  .cta--ghost:hover { color: var(--paper); border-bottom-color: var(--rule-firm); }
+  .cta-arrow { display: inline-block; transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .cta:hover .cta-arrow { transform: translateX(4px); }
+</style>

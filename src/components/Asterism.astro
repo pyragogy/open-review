@@ -1,0 +1,35 @@
+---
+/**
+ * Asterism.astro — three asterisks (⁂) used as a soft section break.
+ *
+ * Editorial register, decorative. Not interactive, not a link.
+ * Letter-spacing 0.4em opens the glyphs into a constellation;
+ * violet-2 keeps it legible without competing with the headline.
+ */
+
+interface Props {
+  /** Override the default top/bottom margin (in rem). */
+  margin?: number;
+}
+
+const { margin = 2 } = Astro.props;
+---
+
+<div class="asterism" aria-hidden="true" style={`--asterism-margin: ${margin}rem`}>
+  ⁂
+</div>
+
+<style>
+  .asterism {
+    margin: var(--asterism-margin) 0;
+    text-align: center;
+    color: var(--violet-2);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.4rem;
+    letter-spacing: 0.4em;
+    user-select: none;
+    line-height: 1;
+  }
+</style>

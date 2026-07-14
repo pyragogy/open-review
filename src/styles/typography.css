@@ -1,0 +1,139 @@
+/**
+ * typography.css — Open Review 2026 (D10)
+ *
+ * Three families:
+ *   - Cormorant Garamond — display, editorial titles, drop caps.
+ *     Christian Thalmann's OFL Garamond reinterpretation, Didone-adjacent
+ *     contrast. Weights 300 (hairline drop caps) / 400 (regular italic) /
+ *     500 (medium emphasis) / 600 (rare strong). No optical-size axis —
+ *     display contrast comes from weight 300 by construction.
+ *   - Inter — body and UI. Continuity with Obliqo. 17px baseline.
+ *   - JetBrains Mono — metadata, badges, inline numerals, marginalia.
+ *
+ * Loading: Google Fonts CDN during Step 1.5–2 iteration. Self-hosted
+ * woff2 in src/assets/fonts/ is a Step 6 polish task (R17).
+ *
+ * Earlier drafts: Hoefler Text → Charter → Fraunces. All superseded by
+ * Cormorant Garamond (D10) — see DECISIONS.md.
+ */
+
+/* ── Editorial baseline ────────────────────────────────────────────── */
+
+html {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern', 'liga', 'cv11', 'tnum';
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  min-height: 100vh;
+  hanging-punctuation: first allow-end;
+}
+
+/* ── Display register — Cormorant italic ───────────────────────────── */
+
+.display,
+[data-display] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-hairline);
+  letter-spacing: -0.012em;
+  line-height: 1.05;
+}
+
+.display-soft,
+[data-display-soft] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-regular);
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.display-sharp,
+[data-display-sharp] {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-hairline);
+  letter-spacing: -0.02em;
+}
+
+/* ── Mono register ─────────────────────────────────────────────────── */
+
+.meta,
+[data-meta] {
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  letter-spacing: 0.04em;
+  color: var(--mono-fg);
+}
+
+.meta-xs,
+[data-meta-xs] {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mono-dim);
+}
+
+.mono-inline,
+[data-mono-inline] {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--violet-3);
+  letter-spacing: 0.02em;
+  font-feature-settings: 'tnum', 'lnum';
+}
+
+/* ── Hanging punctuation helpers (some browsers ignore the global
+       hanging-punctuation property — provide manual indent override) */
+
+.hang-quote {
+  text-indent: -0.4em;
+}
+
+/* ── Drop cap — three lines tall, hairline 300 italic.
+       Use either via Astro <DropCap> or by adding .has-dropcap to a
+       container's first paragraph. */
+
+.has-dropcap > p:first-of-type::first-letter,
+.dropcap-inline {
+  float: left;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--display-hairline);
+  color: var(--violet-3);
+  font-size: 4em;
+  line-height: 0.86;
+  margin: 0.06em 0.08em 0 0;
+  user-select: none;
+}
+
+/* ── Initial letter (CSS standard, progressive enhancement) ────────── */
+
+@supports (initial-letter: 3) {
+  .has-dropcap > p:first-of-type::first-letter {
+    initial-letter: 3 2;
+  }
+}
+
+/* ── Small caps inline helper ──────────────────────────────────────── */
+
+.smallcaps {
+  font-feature-settings: 'smcp';
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Number tabular — for chapter counts, edition numerals ─────────── */
+
+.tnum {
+  font-feature-settings: 'tnum', 'lnum';
+}

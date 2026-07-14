@@ -1,0 +1,238 @@
+---
+/**
+ * /handbook/ — catalog atlas.
+ *
+ * Hand-numbered tour of the ten categories. Each category renders as a
+ * full-bleed plate with: roman numeral, italic title, a one-line
+ * description, and a vertical chapter list with mono numerals.
+ *
+ * The page is meant to be browsed slowly, top-to-bottom, like an index
+ * in a printed book — not a click-and-grab catalogue.
+ */
+import AppShell from '@layouts/AppShell.astro';
+import Fleuron from '@components/Fleuron.astro';
+import { CATEGORIES, CHAPTER_COUNT } from '@data/catalog';
+
+function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let out = '';
+  for (const [val, sym] of map) {
+    while (n >= val) { out += sym; n -= val; }
+  }
+  return out;
+}
+---
+
+<AppShell
+  title="The Catalog — Open Review 2026"
+  description="The Peeragogy Handbook in ten categories: fifty chapters, four AI voices, one annual ritual."
+  bodyClass="page-handbook"
+>
+  <article class="handbook">
+
+    <header class="handbook-head">
+      <p class="eyebrow">An atlas</p>
+      <h1 class="handbook-title display letterpress">
+        The
+        <span class="emph">Peeragogy Handbook</span>,
+        in ten plates.
+      </h1>
+      <p class="handbook-stand display-soft">
+        <span class="mono-inline">{CHAPTER_COUNT}</span> chapters across
+        <span class="mono-inline">{CATEGORIES.length}</span> categories.
+        Each chapter has been read aloud by four AI voices and given a
+        revision document. Choose a plate to begin.
+      </p>
+    </header>
+
+    <Fleuron variant="diamond" margin={3.6} />
+
+    <ol class="atlas">
+      {CATEGORIES.map((cat, i) => (
+        <li class="atlas-plate">
+          <a href={`/handbook/${cat.id}/`} class="atlas-link">
+            <span class="atlas-roman" aria-hidden="true">{toRoman(i + 1)}</span>
+            <div class="atlas-body">
+              <h2 class="atlas-name display">{cat.label}</h2>
+              <p class="atlas-desc">{cat.description}</p>
+              <ul class="atlas-chapters">
+                {cat.chapters.map((ch, j) => (
+                  <li class="atlas-chapter">
+                    <span class="atlas-chapter-num mono-inline">
+                      {String(j + 1).padStart(2, '0')}
+                    </span>
+                    <span class="atlas-chapter-title">{ch.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <span class="atlas-cta meta-xs">
+              {cat.chapters.length} {cat.chapters.length === 1 ? 'chapter' : 'chapters'}
+              <span class="atlas-arrow" aria-hidden="true">→</span>
+            </span>
+          </a>
+          {i < CATEGORIES.length - 1 && (
+            <Fleuron variant={i % 2 === 0 ? 'aldine' : 'quatrefoil'} size={22} margin={2.4} />
+          )}
+        </li>
+      ))}
+    </ol>
+
+  </article>
+</AppShell>
+
+<style>
+  .handbook {
+    max-width: var(--shell-maxw);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vh, 5.5rem) clamp(1.5rem, 5vw, 5rem);
+  }
+
+  .handbook-head {
+    margin: 0 0 2rem;
+    max-width: 44rem;
+  }
+
+  .eyebrow { margin-bottom: 1.4rem; }
+
+  .handbook-title {
+    font-size: var(--t-4xl);
+    line-height: 1.06;
+    color: var(--paper);
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.012em;
+  }
+  .handbook-title .emph { color: var(--violet-3); font-style: italic; }
+
+  .handbook-stand {
+    font-size: clamp(1.1rem, 1.7vw, 1.32rem);
+    line-height: 1.55;
+    color: var(--paper-mute);
+    max-width: 42ch;
+    margin: 1.6rem 0 0;
+  }
+
+  /* ── Atlas ───────────────────────────────────────────────────── */
+
+  .atlas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: plate;
+  }
+
+  .atlas-plate {
+    margin: 0 0 1.2rem;
+  }
+
+  .atlas-link {
+    display: grid;
+    grid-template-columns: minmax(80px, 110px) 1fr auto;
+    gap: clamp(1rem, 3vw, 2.4rem);
+    align-items: start;
+    padding: 1.8rem 0;
+    border-top: 1px solid var(--rule);
+    color: var(--paper-mute);
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .atlas-link:hover,
+  .atlas-link:focus-visible {
+    border-top-color: var(--rule-violet);
+    outline: none;
+  }
+  .atlas-link:hover .atlas-name,
+  .atlas-link:focus-visible .atlas-name {
+    color: var(--violet-2);
+  }
+  .atlas-link:hover .atlas-arrow,
+  .atlas-link:focus-visible .atlas-arrow {
+    transform: translateX(4px);
+  }
+
+  .atlas-roman {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    line-height: 1;
+    color: var(--violet-3);
+    text-align: right;
+    padding-top: 0.2rem;
+    letter-spacing: -0.005em;
+  }
+
+  .atlas-body { min-width: 0; }
+
+  .atlas-name {
+    font-size: var(--t-2xl);
+    line-height: 1.1;
+    color: var(--paper);
+    margin: 0 0 0.6rem;
+    transition: color 0.2s;
+    text-wrap: balance;
+  }
+
+  .atlas-desc {
+    font-family: var(--font-body);
+    font-size: var(--t-base);
+    line-height: 1.6;
+    color: var(--paper-fade);
+    margin: 0 0 1.4rem;
+    max-width: 38em;
+  }
+
+  .atlas-chapters {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.4rem 1.2rem;
+  }
+
+  .atlas-chapter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--paper-mute);
+    padding: 0.2rem 0;
+  }
+  .atlas-chapter-num {
+    color: var(--paper-deepfade);
+    font-size: 0.78rem;
+  }
+  .atlas-chapter-title {
+    font-family: var(--font-body);
+  }
+
+  .atlas-cta {
+    align-self: start;
+    color: var(--violet-3);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    white-space: nowrap;
+  }
+  .atlas-arrow {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  @media (max-width: 760px) {
+    .atlas-link {
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 0.6rem 1.2rem;
+    }
+    .atlas-roman { text-align: left; padding-top: 0; }
+    .atlas-cta { grid-column: 1 / -1; padding-top: 1rem; }
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+/**
+ * EditionStamp.astro — wax-seal-style edition mark.
+ *
+ * Renders as a circular badge with the edition year in Cormorant italic
+ * (large, violet-3) and the engine version in JetBrains Mono caps.
+ * Used in the masthead and (a smaller variant) on chapter pages.
+ */
+import { SITE } from '@data/site';
+
+interface Props {
+  size?: number;
+  compact?: boolean;
+}
+
+const { size = 64, compact = false } = Astro.props;
+---
+
+<div
+  class={`stamp ${compact ? 'stamp--compact' : ''}`}
+  style={`--stamp-size: ${size}px;`}
+  aria-label={`Edition ${SITE.edition}, engine ${SITE.engineVersion}`}
+>
+  <span class="stamp-year">{SITE.edition}</span>
+  {!compact && <span class="stamp-cap">Engine {SITE.engineVersion}</span>}
+</div>
+
+<style>
+  .stamp--compact .stamp-year { font-size: 1.1rem; }
+</style>

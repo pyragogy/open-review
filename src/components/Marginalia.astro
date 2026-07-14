@@ -1,0 +1,60 @@
+---
+/**
+ * Marginalia.astro — right-aligned register block for chapter pages.
+ *
+ * Renders a numeric folio in Cormorant italic (large, violet-3) plus
+ * one or two small mono lines underneath. Sits in the right margin of
+ * a three-pane chapter layout, evoking the running header of a printed
+ * book (chapter number + section title).
+ */
+
+interface Props {
+  /** Folio numeral — chapter index, page number, edition year, etc. */
+  numeral: string | number;
+  /** Top label (uppercase mono caps), shown above the numeral. */
+  topLabel?: string;
+  /** Lines under the numeral (uppercase mono caps). Pass 1–3. */
+  lines?: string[];
+  /** Alignment: 'right' (default) or 'left'. */
+  align?: 'left' | 'right';
+}
+
+const { numeral, topLabel, lines = [], align = 'right' } = Astro.props;
+---
+
+<aside class={`marginalia marg--${align}`}>
+  {topLabel && <span class="marg-toplabel">{topLabel}</span>}
+  <span class="marg-num">{numeral}</span>
+  {lines.map((l) => <span class="marg-line">{l}</span>)}
+</aside>
+
+<style>
+  .marginalia {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.4rem 0;
+  }
+  .marg--right { text-align: right; }
+  .marg--left  { text-align: left; }
+
+  .marg-toplabel {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
+    margin-bottom: 0.4em;
+  }
+
+  .marg-line {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-deepfade);
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,214 @@
+---
+/**
+ * /about/ — manifesto + lineage + colophon-page-style provenance.
+ *
+ * The page that the home links to under "About the edition". Long-form
+ * editorial register, single column, with several pull-quotes between
+ * sections. No CTAs except a closing link back to the catalog.
+ */
+import AppShell from '@layouts/AppShell.astro';
+import Fleuron from '@components/Fleuron.astro';
+import EpigraphQuote from '@components/EpigraphQuote.astro';
+import { SITE } from '@data/site';
+---
+
+<AppShell
+  title="About — Open Review 2026"
+  description="What Open Review is, what it is not, and why it returns once a year."
+  bodyClass="page-about"
+  showStamp={false}
+>
+  <article class="about">
+
+    <header class="about-head">
+      <p class="eyebrow">About the edition</p>
+      <h1 class="about-title display letterpress">
+        A static editorial artifact,
+        <span class="emph">not a product.</span>
+      </h1>
+      <p class="about-stand display-soft">
+        Open Review is the annual reading of the
+        <em>Peeragogy Handbook</em> by four AI voices. Generated on
+        <span class="mono-inline">{SITE.generatedDate}</span>, frozen on
+        deploy, refreshed once a year on the first of January.
+      </p>
+    </header>
+
+    <Fleuron variant="diamond" margin={3.4} />
+
+    <div class="prose has-dropcap">
+      <p>
+        The first edition of the <em>Peeragogy Handbook</em> appeared in
+        2012, written by people teaching each other how to teach each
+        other. Twelve years on, four AI voices have read it again — not
+        to finish it, but to keep it alive.
+      </p>
+      <p>
+        This is the artifact those voices left behind. It is not a tool.
+        It is not a community. It is not a SaaS surface. It is a printed
+        edition that happens to live on the web: a permanent, citable,
+        date-stamped reading that anyone can return to.
+      </p>
+
+      <h2>What this is</h2>
+      <p>
+        Fifty HTML pages, one per chapter, each containing a four-agent
+        revision document generated once by the
+        <em>Obliqo Engine v2.2</em>. Deployed as static files to Netlify.
+        Public domain spirit, with full attribution to the original 2012
+        contributors. Refreshed every <span class="em">January 1st</span>
+        with the engine of that year — making the diff between editions
+        itself a research artifact about how AI critique evolves over
+        time.
+      </p>
+
+      <h2>What this is not</h2>
+      <p>
+        Not a product. Not a community platform. Not a place to sign up.
+        There is no auth, no quota, no analytics that track individuals,
+        no email collection. The reading <em>is</em> the product. Take
+        your time.
+      </p>
+    </div>
+
+    <Fleuron variant="aldine" size={28} margin={3.6} />
+
+    <EpigraphQuote variant="pull" cite="Iván Illich, Deschooling Society, 1971">
+      Most learning is not the result of instruction. It is rather the
+      result of <em>unhampered participation</em> in a meaningful setting.
+    </EpigraphQuote>
+
+    <div class="prose">
+      <h2>Why an annual ritual</h2>
+      <p>
+        January 1st is a release tradition with weight: Lisp, GNU,
+        Debian. A kind of cultural new-year that distinguishes the
+        edition from a continuously-updated SaaS dashboard. Each
+        edition is a single moment in the evolving relationship between
+        the Handbook and the AI voices that read it. Frozen, citable,
+        archivable.
+      </p>
+      <p>
+        The 2026 edition is the first. Each year the engine
+        version, the prompts, and the models will move forward; the
+        chapters they are reading will not. The diff between editions
+        becomes the most interesting page in the catalog.
+      </p>
+
+      <h2>The four voices</h2>
+      <p>
+        The method is straightforward: a chapter is fetched at build
+        time from the canonical fork. Four AI agents read it in
+        sequence. Three react in their own register —
+        <span class="em">research, resonance, distortion</span> — and
+        the fourth, the editor, names the contradictions and ends with
+        one open question for a human reader. None of the voices is
+        trying to finish the work. Their job is to keep it
+        uncomfortable in a useful way.
+      </p>
+
+      <h2>Lineage</h2>
+      <p>
+        Iván Illich, 1962. Howard Rheingold and the original
+        contributors, 2012. Three editions through 2016. The Pyragogy
+        synthesis, 2025. The Obliqo product, March 2026. The pivot to
+        a static artifact, April 30, 2026. <em>Twelve years of
+        practice, forty days of reading.</em>
+      </p>
+
+      <h2>License + attribution</h2>
+      <p>
+        The source chapters are <em>{SITE.attribution.sourceLicense}</em>.
+        Legally we owe nothing; editorially we always credit the original
+        contributors. The reviews themselves are released under the same
+        spirit: take what you want, cite what you use, name the source.
+      </p>
+    </div>
+
+    <Fleuron variant="quatrefoil" size={26} margin={3.6} />
+
+    <p class="cta-row">
+      <a class="cta cta--primary" href="/handbook/">
+        Return to the catalog
+        <span class="cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </p>
+
+  </article>
+</AppShell>
+
+<style>
+  .about {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vh, 5.5rem) clamp(1.5rem, 5vw, 5rem);
+  }
+
+  .eyebrow { margin: 0 0 1.6rem; }
+
+  .about-title {
+    font-size: var(--t-4xl);
+    line-height: 1.05;
+    color: var(--paper);
+    margin: 0 0 1.4rem;
+    text-wrap: balance;
+    letter-spacing: -0.012em;
+  }
+  .about-title .emph { color: var(--violet-3); font-style: italic; }
+
+  .about-stand {
+    font-size: clamp(1.1rem, 1.7vw, 1.32rem);
+    line-height: 1.55;
+    color: var(--paper-mute);
+    max-width: 40ch;
+    margin: 0;
+  }
+
+  .prose .has-dropcap > p:first-of-type::first-letter,
+  .prose.has-dropcap > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-hairline);
+    color: var(--violet-3);
+    font-size: 4em;
+    line-height: 0.9;
+    margin: 0.06em 0.1em 0 0;
+  }
+
+  .prose p {
+    font-size: var(--t-md);
+    line-height: 1.7;
+    color: var(--paper-mute);
+    margin: 0 0 1.4em;
+    text-wrap: pretty;
+    hyphens: auto;
+  }
+  .prose p em { color: var(--paper); font-style: italic; }
+  .prose p .em { color: var(--violet-3); font-style: italic; }
+
+  .prose h2 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: var(--display-regular);
+    font-size: var(--t-xl);
+    line-height: 1.2;
+    color: var(--paper);
+    margin: 2.8rem 0 1rem;
+    letter-spacing: -0.005em;
+  }
+
+  .cta-row { margin: 3rem 0 0; }
+  .cta {
+    display: inline-flex; align-items: baseline; gap: 0.5rem;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 1.05rem; font-weight: 500;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .cta--primary { color: var(--violet-3); border-bottom: 1px solid var(--violet-7); }
+  .cta--primary:hover { color: var(--violet-2); border-bottom-color: var(--violet-3); }
+  .cta-arrow { display: inline-block; transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .cta:hover .cta-arrow { transform: translateX(4px); }
+</style>

@@ -79,10 +79,29 @@ User-facing copy can be in Italian where it feels natural (founder's voice, audi
 ### R19 — Voice: editorial broadside, not SaaS landing
 Tone is closer to a literary review than to a product page. No "Sign up now!", no "Boost your productivity!", no marketing CTAs in body content. The single CTA is the footer link to Obliqo, written soberly.
 
-### R20 — Visual identity: ink-violet
-Inherited from the maintenance page (April 2026). Hoefler Text italic for headings, Charter for body, JetBrains Mono for UI/metadata. Asymmetric layouts. Grain texture. Two radial washes drift. Dark editorial atmosphere.
+### R20 — Visual identity: ink-violet, Hybrid Scenario C (Cormorant) typography
+Inherited from the maintenance page (April 2026). Asymmetric editorial layouts. Grain texture overlay. Two radial violet drifts (32s ease-in-out alternate). Dark editorial atmosphere.
 
-Amber `#f59e0b` is reserved for Obliqo. Do not use in Open Review except in the explicit "powered by Obliqo" link.
+**Typography (D10 supersedes D9 — Hybrid Scenario C with Cormorant Garamond):**
+
+- **Cormorant Garamond** (Christian Thalmann, OFL-licensed) — display, editorial titles, drop caps, decorative italics. Didone-adjacent reinterpretation of Garamond with hairline contrast. Weights 300/400/500/600 plus italic, no optical-size or softness axes — display contrast comes from the hairline 300 weight by construction. The drop cap on the homepage uses `font-weight: 300` at 4.8em for maximum stroke contrast. Soft-tone phrases (standfirst, colophon italics, category names) use weight 400 italic.
+- **Inter** (variable: `wght` axis) — body and UI. Continuity with Obliqo. Optimised for review reading at 17px baseline.
+- **JetBrains Mono** — metadata, edition badges, provenance, edition counts inline in prose, mono-numeric counts in the catalog strip.
+
+Charter, Hoefler Text, and Fraunces were named in earlier drafts and superseded by D10. Cormorant Garamond is OFL-licensed (legal self-host R17), Google-Fonts-available (fast Step 1.5 iteration), and Didone-adjacent in contrast — closer to the original R20 Hoefler Text intent than Fraunces' warmer humanist take. The hybrid still resolves the chapter-page composition need (display register distinct from Obliqo's Inter) while aligning more closely with the broadside register the editorial direction is built on.
+
+Self-hosting all three families as woff2 in `src/assets/fonts/` is a Step 6 polish task before deploy (R17 compliance). During Step 1.5 iteration we load from Google Fonts CDN.
+
+**Agent voice palette** (semantic, not brand):
+
+- Critical Researcher → indigo `#6366f1`
+- Resonance Pattern → emerald `#10b981`
+- Distortion Pattern → rose `#f43f5e`
+- Editorial Brief → violet `#a78bfa` — distinct from Obliqo amber but coherent with the ink-violet brand family
+
+**Eight-stop violet ramp** (`--violet-1` through `--violet-7` plus `--violet-ink`) — see `src/styles/tokens.css`. The ramp underpins every editorial accent: `--violet-3` carries primary emphasis (drop cap, "Peeragogy Handbook" inside the headline, `<span class="em">` highlights, mono-inline numbers in the meta-band).
+
+Amber `#f59e0b` is reserved for Obliqo and lives ONLY in the `--obliqo` token. The Powered-by-Obliqo CTA in `Colophon.astro` is its single permitted use. Verified at build time by greppping `dist/_astro/*.css` for the literal — the only matches must be the token definition and the `.obliqo-link` rule.
 
 ### R21 — Slowness is okay
 This is not a SaaS dashboard. Animations can be slow. Reveals can be staggered. The reading experience is the product. `prefers-reduced-motion` is respected.

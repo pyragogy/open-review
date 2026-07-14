@@ -4,6 +4,7 @@ dist/
 build/
 .cache/
 .parcel-cache/
+.astro/
 
 # Environment
 .env
